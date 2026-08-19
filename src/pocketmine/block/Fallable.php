@@ -28,8 +28,8 @@ use pocketmine\nbt\tag\Byte;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Double;
 use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\Float;
-use pocketmine\nbt\tag\Int;
+use pocketmine\nbt\tag\FloatTag;
+use pocketmine\nbt\tag\IntTag;
 use pocketmine\Player;
 
 abstract class Fallable extends Solid{
@@ -56,10 +56,10 @@ abstract class Fallable extends Solid{
 						new Double("", 0)
 					]),
 					"Rotation" => new Enum("Rotation", [
-						new Float("", 0),
-						new Float("", 0)
+						new FloatTag("", 0),
+						new FloatTag("", 0)
 					]),
-					"TileID" => new Int("TileID", $this->getId()),
+					"TileID" => new IntTag("TileID", $this->getId()),
 					"Data" => new Byte("Data", $this->getDamage()),
 				]));
 

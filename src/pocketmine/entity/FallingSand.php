@@ -31,7 +31,7 @@ use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\Byte;
-use pocketmine\nbt\tag\Int;
+use pocketmine\nbt\tag\IntTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
@@ -54,7 +54,7 @@ class FallingSand extends Entity{
 			$this->blockId = $this->namedtag["TileID"];
 		}elseif(isset($this->namedtag->Tile)){
 			$this->blockId = $this->namedtag["Tile"];
-			$this->namedtag["TileID"] = new Int("TileID", $this->blockId);
+			$this->namedtag["TileID"] = new IntTag("TileID", $this->blockId);
 		}
 
 		if(isset($this->namedtag->Data)){
@@ -139,7 +139,7 @@ class FallingSand extends Entity{
 	}
 
 	public function saveNBT(){
-		$this->namedtag->TileID = new Int("TileID", $this->blockId);
+		$this->namedtag->TileID = new IntTag("TileID", $this->blockId);
 		$this->namedtag->Data = new Byte("Data", $this->damage);
 	}
 

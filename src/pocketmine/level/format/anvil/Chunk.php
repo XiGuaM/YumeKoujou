@@ -29,8 +29,8 @@ use pocketmine\nbt\tag\Byte;
 use pocketmine\nbt\tag\ByteArray;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\Int;
-use pocketmine\nbt\tag\IntArray;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\IntArrayTag;
 use pocketmine\Player;
 use pocketmine\utils\Binary;
 
@@ -66,12 +66,12 @@ class Chunk extends BaseChunk{
 			$this->nbt->Biomes = new ByteArray("Biomes", \str_repeat("\x01", 256));
 		}
 
-		if(!isset($this->nbt->BiomeColors) or !($this->nbt->BiomeColors instanceof IntArray)){
-			$this->nbt->BiomeColors = new IntArray("BiomeColors", \array_fill(0, 256, (\PHP_INT_SIZE === 8 ? \unpack("N", "\x00\x85\xb2\x4a")[1] << 32 >> 32 : \unpack("N", "\x00\x85\xb2\x4a")[1])));
+		if(!isset($this->nbt->BiomeColors) or !($this->nbt->BiomeColors instanceof IntArrayTag)){
+			$this->nbt->BiomeColors = new IntArrayTag("BiomeColors", \array_fill(0, 256, (\PHP_INT_SIZE === 8 ? \unpack("N", "\x00\x85\xb2\x4a")[1] << 32 >> 32 : \unpack("N", "\x00\x85\xb2\x4a")[1])));
 		}
 
-		if(!isset($this->nbt->HeightMap) or !($this->nbt->HeightMap instanceof IntArray)){
-			$this->nbt->HeightMap = new IntArray("HeightMap", \array_fill(0, 256, 127));
+		if(!isset($this->nbt->HeightMap) or !($this->nbt->HeightMap instanceof IntArrayTag)){
+			$this->nbt->HeightMap = new IntArrayTag("HeightMap", \array_fill(0, 256, 127));
 		}
 
 		$sections = [];
@@ -155,8 +155,8 @@ class Chunk extends BaseChunk{
 	public function toBinary(){
 		$nbt = clone $this->getNBT();
 
-		$nbt->xPos = new Int("xPos", $this->x);
-		$nbt->zPos = new Int("zPos", $this->z);
+		$nbt->xPos = new IntTag("xPos", $this->x);
+		$nbt->zPos = new IntTag("zPos", $this->z);
 
 		$nbt->Sections = new Enum("Sections", []);
 		$nbt->Sections->setTagType(NBT::TAG_Compound);
@@ -174,9 +174,9 @@ class Chunk extends BaseChunk{
 		}
 
 		$nbt->Biomes = new ByteArray("Biomes", $this->getBiomeIdArray());
-		$nbt->BiomeColors = new IntArray("BiomeColors", $this->getBiomeColorArray());
+		$nbt->BiomeColors = new IntArrayTag("BiomeColors", $this->getBiomeColorArray());
 
-		$nbt->HeightMap = new IntArray("HeightMap", $this->getHeightMapArray());
+		$nbt->HeightMap = new IntArrayTag("HeightMap", $this->getHeightMapArray());
 
 		$entities = [];
 

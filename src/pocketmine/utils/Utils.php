@@ -219,6 +219,7 @@ class Utils{
 	 * @param int    &$drop        Will be set to the amount of dropped bytes
 	 *
 	 * @return string
+	 * @deprecated
 	 */
 	public static function getRandomBytes($length = 16, $secure = \true, $raw = \true, $startEntropy = "", &$rounds = 0, &$drop = 0){
 		static $lastRandom = "";
@@ -227,7 +228,7 @@ class Utils{
 		$secureValue = "";
 		$rounds = 0;
 		$drop = 0;
-		while(!isset($output{$length - 1})){
+		while(!isset($output[$length - 1])){
 			//some entropy, but works ^^
 			$weakEntropy = [
 				\is_array($startEntropy) ? \implode($startEntropy) : $startEntropy,
@@ -284,7 +285,7 @@ class Utils{
 					\is_array($startEntropy) ? \hash("sha512", $startEntropy[($rounds + $drop) % \count($startEntropy)], \true) : \hash("sha512", $startEntropy, \true), //Get a random index of the startEntropy, or just read it
 					$systemRandom,
 					\function_exists("openssl_random_pseudo_bytes") ? openssl_random_pseudo_bytes(64) : \str_repeat("\x00", 64),
-					\function_exists("mcrypt_create_iv") ? mcrypt_create_iv(64, MCRYPT_DEV_URANDOM) : \str_repeat("\x00", 64),
+					\function_exists("mcrypt_create_iv") ? random_bytes(64) : \str_repeat("\x00", 64),
 					$value,
 				];
 				$strongEntropy = \array_pop($strongEntropyValues);
@@ -295,7 +296,7 @@ class Utils{
 				//Von Neumann randomness extractor, increases entropy
 				$bitcnt = 0;
 				for($j = 0; $j < 64; ++$j){
-					$a = \ord($strongEntropy{$j});
+					$a = \ord($strongEntropy[$j]);
 					for($i = 0; $i < 8; $i += 2){
 						$b = ($a & (1 << $i)) > 0 ? 1 : 0;
 						if($b != (($a & (1 << ($i + 1))) > 0 ? 1 : 0)){

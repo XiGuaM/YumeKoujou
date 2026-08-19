@@ -37,7 +37,7 @@ use pocketmine\nbt\tag\Byte;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Double;
 use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\Float;
+use pocketmine\nbt\tag\FloatTag;
 use pocketmine\network\protocol\ExplodePacket;
 use pocketmine\Server;
 use pocketmine\utils\Random;
@@ -202,8 +202,8 @@ class Explosion{
 						new Double("", -\cos($mot) * 0.02)
 					]),
 					"Rotation" => new Enum("Rotation", [
-						new Float("", 0),
-						new Float("", 0)
+						new FloatTag("", 0),
+						new FloatTag("", 0)
 					]),
 					"Fuse" => new Byte("Fuse", \mt_rand(10, 30))
 				]));

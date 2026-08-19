@@ -27,8 +27,8 @@ use pocketmine\nbt\tag\Byte;
 use pocketmine\nbt\tag\ByteArray;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\Int;
-use pocketmine\nbt\tag\IntArray;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\IntArrayTag;
 use pocketmine\nbt\tag\Long;
 use pocketmine\utils\Binary;
 use pocketmine\utils\MainLogger;
@@ -116,16 +116,16 @@ class RegionLoader extends \pocketmine\level\format\mcregion\RegionLoader{
 
 	public function generateChunk($x, $z){
 		$nbt = new Compound("Level", []);
-		$nbt->xPos = new Int("xPos", ($this->getX() * 32) + $x);
-		$nbt->zPos = new Int("zPos", ($this->getZ() * 32) + $z);
+		$nbt->xPos = new IntTag("xPos", ($this->getX() * 32) + $x);
+		$nbt->zPos = new IntTag("zPos", ($this->getZ() * 32) + $z);
 		$nbt->LastUpdate = new Long("LastUpdate", 0);
 		$nbt->LightPopulated = new Byte("LightPopulated", 0);
 		$nbt->TerrainPopulated = new Byte("TerrainPopulated", 0);
 		$nbt->V = new Byte("V", self::VERSION);
 		$nbt->InhabitedTime = new Long("InhabitedTime", 0);
 		$nbt->Biomes = new ByteArray("Biomes", \str_repeat(\chr(-1), 256));
-		$nbt->BiomeColors = new IntArray("BiomeColors", \array_fill(0, 156, (\PHP_INT_SIZE === 8 ? \unpack("N", "\x00\x85\xb2\x4a")[1] << 32 >> 32 : \unpack("N", "\x00\x85\xb2\x4a")[1])));
-		$nbt->HeightMap = new IntArray("HeightMap", \array_fill(0, 256, 127));
+		$nbt->BiomeColors = new IntArrayTag("BiomeColors", \array_fill(0, 156, (\PHP_INT_SIZE === 8 ? \unpack("N", "\x00\x85\xb2\x4a")[1] << 32 >> 32 : \unpack("N", "\x00\x85\xb2\x4a")[1])));
+		$nbt->HeightMap = new IntArrayTag("HeightMap", \array_fill(0, 256, 127));
 		$nbt->Sections = new Enum("Sections", []);
 		$nbt->Sections->setTagType(NBT::TAG_Compound);
 		$nbt->Entities = new Enum("Entities", []);

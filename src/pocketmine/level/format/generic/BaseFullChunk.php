@@ -204,12 +204,12 @@ abstract class BaseFullChunk implements FullChunk{
 	}
 
 	public function getBiomeId($x, $z){
-		return \ord($this->biomeIds{($z << 4) + $x});
+		return \ord($this->biomeIds[($z << 4) + $x]);
 	}
 
 	public function setBiomeId($x, $z, $biomeId){
 		$this->hasChanged = \true;
-		$this->biomeIds{($z << 4) + $x} = \chr($biomeId);
+		$this->biomeIds[($z << 4) + $x] = \chr($biomeId);
 	}
 
 	public function getBiomeColor($x, $z){
@@ -234,7 +234,7 @@ abstract class BaseFullChunk implements FullChunk{
 	public function getHighestBlockAt($x, $z){
 		$column = $this->getBlockIdColumn($x, $z);
 		for($y = 127; $y >= 0; --$y){
-			if($column{$y} !== "\x00"){
+			if($column[$y] !== "\x00"){
 				return $y;
 			}
 		}

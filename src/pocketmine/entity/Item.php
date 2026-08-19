@@ -30,7 +30,7 @@ use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\Byte;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Short;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\protocol\AddItemEntityPacket;
 use pocketmine\Player;
 
@@ -155,10 +155,10 @@ class Item extends Entity{
 		$this->namedtag->Age = new Short("Age", $this->age);
 		$this->namedtag->PickupDelay = new Short("PickupDelay", $this->pickupDelay);
 		if($this->owner !== \null){
-			$this->namedtag->Owner = new String("Owner", $this->owner);
+			$this->namedtag->Owner = new StringTag("Owner", $this->owner);
 		}
 		if($this->thrower !== \null){
-			$this->namedtag->Thrower = new String("Thrower", $this->thrower);
+			$this->namedtag->Thrower = new StringTag("Thrower", $this->thrower);
 		}
 	}
 

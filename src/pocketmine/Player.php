@@ -83,9 +83,9 @@ use pocketmine\nbt\tag\Byte;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Double;
 use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\Float;
-use pocketmine\nbt\tag\Int;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\FloatTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\protocol\AdventureSettingsPacket;
 use pocketmine\network\protocol\AnimatePacket;
 use pocketmine\network\protocol\DataPacket;
@@ -956,7 +956,7 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 			$this->inventory->sendHeldItem($this->hasSpawned);
 		}
 
-		$this->namedtag->playerGameType = new Int("playerGameType", $this->gamemode);
+		$this->namedtag->playerGameType = new IntTag("playerGameType", $this->gamemode);
 
 		$spawnPosition = $this->getSpawn();
 
@@ -1477,14 +1477,14 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 
 				$nbt = $this->server->getOfflinePlayerData($this->username);
 				if(!isset($nbt->NameTag)){
-					$nbt->NameTag = new String("NameTag", $this->username);
+					$nbt->NameTag = new StringTag("NameTag", $this->username);
 				}else{
 					$nbt["NameTag"] = $this->username;
 				}
 				$this->gamemode = $nbt["playerGameType"] & 0x03;
 				if($this->server->getForceGamemode()){
 					$this->gamemode = $this->server->getGamemode();
-					$nbt->playerGameType = new Int("playerGameType", $this->gamemode);
+					$nbt->playerGameType = new IntTag("playerGameType", $this->gamemode);
 				}
 				if(($level = $this->server->getLevelByName($nbt["Level"])) === \null){
 					$this->setLevel($this->server->getDefaultLevel(), \true);
@@ -1776,8 +1776,8 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 								new Double("", \cos($this->yaw / 180 * M_PI) * \cos($this->pitch / 180 * M_PI))
 							]),
 							"Rotation" => new Enum("Rotation", [
-								new Float("", $this->yaw),
-								new Float("", $this->pitch)
+								new FloatTag("", $this->yaw),
+								new FloatTag("", $this->pitch)
 							]),
 						]);
 
@@ -1835,8 +1835,8 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 									new Double("", \cos($this->yaw / 180 * M_PI) * \cos($this->pitch / 180 * M_PI))
 								]),
 								"Rotation" => new Enum("Rotation", [
-									new Float("", $this->yaw),
-									new Float("", $this->pitch)
+									new FloatTag("", $this->yaw),
+									new FloatTag("", $this->pitch)
 								]),
 							]);
 
@@ -2480,7 +2480,7 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 
 		parent::saveNBT();
 		if($this->level instanceof Level){
-			$this->namedtag->Level = new String("Level", $this->level->getName());
+			$this->namedtag->Level = new StringTag("Level", $this->level->getName());
 			if($this->spawnPosition instanceof Position and $this->spawnPosition->getLevel() instanceof Level){
 				$this->namedtag["SpawnLevel"] = $this->spawnPosition->getLevel()->getName();
 				$this->namedtag["SpawnX"] = (int) $this->spawnPosition->x;

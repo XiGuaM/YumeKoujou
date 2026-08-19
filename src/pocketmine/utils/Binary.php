@@ -134,14 +134,14 @@ class Binary{
 	public static function readMetadata($value, $types = \false){
 		$offset = 0;
 		$m = [];
-		$b = \ord($value{$offset});
+		$b = \ord($value[$offset]);
 		++$offset;
-		while($b !== 127 and isset($value{$offset})){
+		while($b !== 127 and isset($value[$offset])){
 			$bottom = $b & 0x1F;
 			$type = $b >> 5;
 			switch($type){
 				case 0:
-					$r = self::readByte($value{$offset});
+					$r = self::readByte($value[$offset]);
 					++$offset;
 					break;
 				case 1:
@@ -166,7 +166,7 @@ class Binary{
 					$r = [];
 					$r[] = self::readLShort(\substr($value, $offset, 2));
 					$offset += 2;
-					$r[] = \ord($value{$offset});
+					$r[] = \ord($value[$offset]);
 					++$offset;
 					$r[] = self::readLShort(\substr($value, $offset, 2));
 					$offset += 2;
@@ -187,7 +187,7 @@ class Binary{
 			}else{
 				$m[$bottom] = $r;
 			}
-			$b = \ord($value{$offset});
+			$b = \ord($value[$offset]);
 			++$offset;
 		}
 
@@ -225,7 +225,7 @@ class Binary{
 	 * @return int
 	 */
 	public static function readByte($c, $signed = \true){
-		$b = \ord($c{0});
+		$b = \ord($c[0]);
 
 		if($signed){
 			if(\PHP_INT_SIZE === 8){

@@ -23,22 +23,7 @@ namespace pocketmine\nbt\tag;
 
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\Enum as TagEnum;
-
 use pocketmine\utils\Binary;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class Enum extends NamedTag implements \ArrayAccess, \Countable{
 
@@ -134,7 +119,7 @@ class Enum extends NamedTag implements \ArrayAccess, \Countable{
 					$this->{$i} = $tag;
 					break;
 				case NBT::TAG_Int:
-					$tag = new Int(\false);
+					$tag = new IntTag(\false);
 					$tag->read($nbt);
 					$this->{$i} = $tag;
 					break;
@@ -144,7 +129,7 @@ class Enum extends NamedTag implements \ArrayAccess, \Countable{
 					$this->{$i} = $tag;
 					break;
 				case NBT::TAG_Float:
-					$tag = new Float(\false);
+					$tag = new FloatTag(\false);
 					$tag->read($nbt);
 					$this->{$i} = $tag;
 					break;
@@ -159,7 +144,7 @@ class Enum extends NamedTag implements \ArrayAccess, \Countable{
 					$this->{$i} = $tag;
 					break;
 				case NBT::TAG_String:
-					$tag = new String(\false);
+					$tag = new StringTag(\false);
 					$tag->read($nbt);
 					$this->{$i} = $tag;
 					break;
@@ -174,7 +159,7 @@ class Enum extends NamedTag implements \ArrayAccess, \Countable{
 					$this->{$i} = $tag;
 					break;
 				case NBT::TAG_IntArray:
-					$tag = new IntArray(\false);
+					$tag = new IntArrayTag(\false);
 					$tag->read($nbt);
 					$this->{$i} = $tag;
 					break;

@@ -28,7 +28,7 @@ use pocketmine\level\Level;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Double;
 use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\Float;
+use pocketmine\nbt\tag\FloatTag;
 use pocketmine\Player;
 
 class SpawnEgg extends Item{
@@ -60,8 +60,8 @@ class SpawnEgg extends Item{
 				new Double("", 0)
 			]),
 			"Rotation" => new Enum("Rotation", [
-				new Float("", \lcg_value() * 360),
-				new Float("", 0)
+				new FloatTag("", \lcg_value() * 360),
+				new FloatTag("", 0)
 			]),
 		]);
 

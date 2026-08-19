@@ -68,11 +68,11 @@ use pocketmine\nbt\tag\Byte;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Double;
 use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\Float;
-use pocketmine\nbt\tag\Int;
+use pocketmine\nbt\tag\FloatTag;
+use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\Long;
 use pocketmine\nbt\tag\Short;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\protocol\DataPacket;
 use pocketmine\network\query\QueryHandler;
 use pocketmine\network\RakLibInterface;
@@ -719,7 +719,7 @@ class Server{
 				new Double(1, $spawn->y),
 				new Double(2, $spawn->z)
 			]),
-			new String("Level", $this->getDefaultLevel()->getName()),
+			new StringTag("Level", $this->getDefaultLevel()->getName()),
 			//new String("SpawnLevel", $this->getDefaultLevel()->getName()),
 			//new Int("SpawnX", (int) $spawn->x),
 			//new Int("SpawnY", (int) $spawn->y),
@@ -727,22 +727,22 @@ class Server{
 			//new Byte("SpawnForced", 1), //TODO
 			new Enum("Inventory", []),
 			new Compound("Achievements", []),
-			new Int("playerGameType", $this->getGamemode()),
+			new IntTag("playerGameType", $this->getGamemode()),
 			new Enum("Motion", [
 				new Double(0, 0.0),
 				new Double(1, 0.0),
 				new Double(2, 0.0)
 			]),
 			new Enum("Rotation", [
-				new Float(0, 0.0),
-				new Float(1, 0.0)
+				new FloatTag(0, 0.0),
+				new FloatTag(1, 0.0)
 			]),
-			new Float("FallDistance", 0.0),
+			new FloatTag("FallDistance", 0.0),
 			new Short("Fire", 0),
 			new Short("Air", 0),
 			new Byte("OnGround", 1),
 			new Byte("Invulnerable", 0),
-			new String("NameTag", $name),
+			new StringTag("NameTag", $name),
 		]);
 		$nbt->Pos->setTagType(NBT::TAG_Double);
 		$nbt->Inventory->setTagType(NBT::TAG_Compound);
@@ -1137,7 +1137,7 @@ class Server{
 			return \false;
 		}
 
-		$seed = $seed === \null ? (\PHP_INT_SIZE === 8 ? \unpack("N", @Utils::getRandomBytes(4, \false))[1] << 32 >> 32 : \unpack("N", @Utils::getRandomBytes(4, \false))[1]) : (int) $seed;
+		$seed = $seed === \null ? Binary::readInt(@random_bytes(4)) : (int) $seed;
 
 		if(!isset($options["presey"])){
 			$options["preset"] = $this->getConfigString("generator-settings", "");
@@ -1528,7 +1528,7 @@ class Server{
 			"level-type" => "DEFAULT",
 			"enable-query" => \true,
 			"enable-rcon" => \false,
-			"rcon.password" => \substr(\base64_encode(@Utils::getRandomBytes(20, \false)), 3, 10),
+			"rcon.password" => \substr(\base64_encode(@random_bytes(20)), 3, 10),
 			"auto-save" => \true,
 		]);
 
@@ -1590,7 +1590,7 @@ class Server{
 		}
 
 		$this->logger->info("Starting Minecraft PE server on " . ($this->getIp() === "" ? "*" : $this->getIp()) . ":" . $this->getPort());
-		\define("BOOTUP_RANDOM", @Utils::getRandomBytes(16));
+		\define("BOOTUP_RANDOM", @random_bytes(16));
 		$this->serverID = Binary::readLong(\substr(Utils::getUniqueID(\true, $this->getIp() . $this->getPort()), 0, 8));
 
 		$this->addInterface($this->mainInterface = new RakLibInterface($this));
