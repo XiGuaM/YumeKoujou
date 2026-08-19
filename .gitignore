@@ -8,7 +8,6 @@ timings/*
 server.properties
 pocketmine.yml
 *.txt
-island.yml
 crashdumps/*
 
 # Common IDEs
