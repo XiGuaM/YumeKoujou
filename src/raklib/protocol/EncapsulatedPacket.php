@@ -21,16 +21,7 @@
 
 namespace raklib\protocol;
 
-
 use raklib\Binary;
-
-
-
-
-
-
-
-
 
 class EncapsulatedPacket{
 
@@ -58,7 +49,7 @@ class EncapsulatedPacket{
 
 	    $packet = new EncapsulatedPacket();
 
-        $flags = \ord($binary{0});
+        $flags = \ord($binary[0]);
         $packet->reliability = $reliability = ($flags & 0b11100000) >> 5;
         $packet->hasSplit = $hasSplit = ($flags & 0b00010000) > 0;
         if($internal){
@@ -108,7 +99,7 @@ class EncapsulatedPacket{
         ){
             $packet->orderIndex = \unpack("V", \substr($binary, $offset, 3) . "\x00")[1];
             $offset += 3;
-            $packet->orderChannel = \ord($binary{$offset++});
+            $packet->orderChannel = \ord($binary[$offset++]);
         }else{
 	        $packet->orderIndex = \null;
 	        $packet->orderChannel = \null;
