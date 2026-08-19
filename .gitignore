@@ -1,0 +1,37 @@
+players/*
+worlds/*
+plugins/*
+bin/*
+timings/*
+*.log
+*.phar
+server.properties
+pocketmine.yml
+*.txt
+island.yml
+crashdumps/*
+
+# Common IDEs
+.idea/
+nbproject/*
+.vscode/
+
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Mac crap
+.DS_Store
+/nbproject/private/
+
+# Sphinx-doc
+/docs/build/
+!/docs/requirements.txt
+.project
+
+# Composer
+vendor/*
+*.lock
+target/*
