@@ -26,7 +26,7 @@ use pocketmine\item\Item;
 use pocketmine\nbt\tag\Byte;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Double;
-use pocketmine\nbt\tag\Enum;
+use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\Player;
 use pocketmine\utils\Random;
@@ -58,17 +58,17 @@ class TNT extends Solid{
 
 			$mot = (new Random())->nextSignedFloatTag() * M_PI * 2;
 			$tnt = Entity::createEntity("PrimedTNT", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), new Compound("", [
-				"Pos" => new Enum("Pos", [
+				"Pos" => new EnumTag("Pos", [
 					new Double("", $this->x + 0.5),
 					new Double("", $this->y),
 					new Double("", $this->z + 0.5)
 				]),
-				"Motion" => new Enum("Motion", [
+				"Motion" => new EnumTag("Motion", [
 					new Double("", -\sin($mot) * 0.02),
 					new Double("", 0.2),
 					new Double("", -\cos($mot) * 0.02)
 				]),
-				"Rotation" => new Enum("Rotation", [
+				"Rotation" => new EnumTag("Rotation", [
 					new FloatTag("", 0),
 					new FloatTag("", 0)
 				]),

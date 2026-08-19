@@ -29,7 +29,7 @@ use pocketmine\item\Item as ItemItem;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\Byte;
 use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Short;
+use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\protocol\AddItemEntityPacket;
 use pocketmine\Player;
@@ -147,13 +147,13 @@ class Item extends Entity{
 	public function saveNBT(){
 		parent::saveNBT();
 		$this->namedtag->Item = new Compound("Item", [
-			"id" => new Short("id", $this->item->getId()),
-			"Damage" => new Short("Damage", $this->item->getDamage()),
+			"id" => new ShortTag("id", $this->item->getId()),
+			"Damage" => new ShortTag("Damage", $this->item->getDamage()),
 			"Count" => new Byte("Count", $this->item->getCount())
 		]);
-		$this->namedtag->Health = new Short("Health", $this->getHealth());
-		$this->namedtag->Age = new Short("Age", $this->age);
-		$this->namedtag->PickupDelay = new Short("PickupDelay", $this->pickupDelay);
+		$this->namedtag->Health = new ShortTag("Health", $this->getHealth());
+		$this->namedtag->Age = new ShortTag("Age", $this->age);
+		$this->namedtag->PickupDelay = new ShortTag("PickupDelay", $this->pickupDelay);
 		if($this->owner !== \null){
 			$this->namedtag->Owner = new StringTag("Owner", $this->owner);
 		}

@@ -82,7 +82,7 @@ use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\Byte;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Double;
-use pocketmine\nbt\tag\Enum;
+use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
@@ -1765,17 +1765,17 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 
 					if($item->getId() === Item::SNOWBALL){
 						$nbt = new Compound("", [
-							"Pos" => new Enum("Pos", [
+							"Pos" => new EnumTag("Pos", [
 								new Double("", $this->x),
 								new Double("", $this->y + $this->getEyeHeight()),
 								new Double("", $this->z)
 							]),
-							"Motion" => new Enum("Motion", [
+							"Motion" => new EnumTag("Motion", [
 								new Double("", -\sin($this->yaw / 180 * M_PI) * \cos($this->pitch / 180 * M_PI)),
 								new Double("", -\sin($this->pitch / 180 * M_PI)),
 								new Double("", \cos($this->yaw / 180 * M_PI) * \cos($this->pitch / 180 * M_PI))
 							]),
-							"Rotation" => new Enum("Rotation", [
+							"Rotation" => new EnumTag("Rotation", [
 								new FloatTag("", $this->yaw),
 								new FloatTag("", $this->pitch)
 							]),
@@ -1824,17 +1824,17 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 
 
 							$nbt = new Compound("", [
-								"Pos" => new Enum("Pos", [
+								"Pos" => new EnumTag("Pos", [
 									new Double("", $this->x),
 									new Double("", $this->y + $this->getEyeHeight()),
 									new Double("", $this->z)
 								]),
-								"Motion" => new Enum("Motion", [
+								"Motion" => new EnumTag("Motion", [
 									new Double("", -\sin($this->yaw / 180 * M_PI) * \cos($this->pitch / 180 * M_PI)),
 									new Double("", -\sin($this->pitch / 180 * M_PI)),
 									new Double("", \cos($this->yaw / 180 * M_PI) * \cos($this->pitch / 180 * M_PI))
 								]),
-								"Rotation" => new Enum("Rotation", [
+								"Rotation" => new EnumTag("Rotation", [
 									new FloatTag("", $this->yaw),
 									new FloatTag("", $this->pitch)
 								]),

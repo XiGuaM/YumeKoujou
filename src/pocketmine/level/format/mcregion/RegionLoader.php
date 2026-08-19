@@ -27,7 +27,7 @@ use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\Byte;
 use pocketmine\nbt\tag\ByteArray;
 use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Enum;
+use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\IntArrayTag;
 use pocketmine\nbt\tag\Long;
@@ -165,11 +165,11 @@ class RegionLoader{
 		$nbt->SkyLight = new ByteArray("SkyLight", $half);
 		$nbt->BlockLight = new ByteArray("BlockLight", $half);
 
-		$nbt->Entities = new Enum("Entities", []);
+		$nbt->Entities = new EnumTag("Entities", []);
 		$nbt->Entities->setTagType(NBT::TAG_Compound);
-		$nbt->TileEntities = new Enum("TileEntities", []);
+		$nbt->TileEntities = new EnumTag("TileEntities", []);
 		$nbt->TileEntities->setTagType(NBT::TAG_Compound);
-		$nbt->TileTicks = new Enum("TileTicks", []);
+		$nbt->TileTicks = new EnumTag("TileTicks", []);
 		$nbt->TileTicks->setTagType(NBT::TAG_Compound);
 		$writer = new NBT(NBT::BIG_ENDIAN);
 		$nbt->setName("Level");

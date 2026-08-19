@@ -30,9 +30,9 @@ use pocketmine\math\Vector3;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\Byte;
 use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Enum;
+use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\IntTag;
-use pocketmine\nbt\tag\Short;
+use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 
 class Chest extends Spawnable implements InventoryHolder, Container{
@@ -46,8 +46,8 @@ class Chest extends Spawnable implements InventoryHolder, Container{
 		parent::__construct($chunk, $nbt);
 		$this->inventory = new ChestInventory($this);
 
-		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof Enum)){
-			$this->namedtag->Items = new Enum("Inventory", []);
+		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof EnumTag)){
+			$this->namedtag->Items = new EnumTag("Inventory", []);
 			$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		}
 
@@ -70,7 +70,7 @@ class Chest extends Spawnable implements InventoryHolder, Container{
 	}
 
 	public function saveNBT(){
-		$this->namedtag->Items = new Enum("Items", []);
+		$this->namedtag->Items = new EnumTag("Items", []);
 		$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		for($index = 0; $index < $this->getSize(); ++$index){
 			$this->setItem($index, $this->inventory->getItem($index));
@@ -129,8 +129,8 @@ class Chest extends Spawnable implements InventoryHolder, Container{
 		$d = new Compound(\false, [
 			new Byte("Count", $item->getCount()),
 			new Byte("Slot", $index),
-			new Short("id", $item->getId()),
-			new Short("Damage", $item->getDamage()),
+			new ShortTag("id", $item->getId()),
+			new ShortTag("Damage", $item->getDamage()),
 		]);
 
 		if($item->getId() === Item::AIR or $item->getCount() <= 0){

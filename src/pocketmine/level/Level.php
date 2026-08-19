@@ -77,10 +77,10 @@ use pocketmine\metadata\MetadataValue;
 use pocketmine\nbt\tag\Byte;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Double;
-use pocketmine\nbt\tag\Enum;
+use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
-use pocketmine\nbt\tag\Short;
+use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\protocol\SetTimePacket;
 use pocketmine\network\protocol\UpdateBlockPacket;
@@ -1170,28 +1170,28 @@ class Level implements ChunkManager, Metadatable{
 		$motion = $motion === \null ? new Vector3(\lcg_value() * 0.2 - 0.1, 0.2, \lcg_value() * 0.2 - 0.1) : $motion;
 		if($item->getId() > 0 and $item->getCount() > 0){
 			$itemEntity = Entity::createEntity("Item", $this->getChunk($source->getX() >> 4, $source->getZ() >> 4), new Compound("", [
-				"Pos" => new Enum("Pos", [
+				"Pos" => new EnumTag("Pos", [
 					new Double("", $source->getX()),
 					new Double("", $source->getY()),
 					new Double("", $source->getZ())
 				]),
 
-				"Motion" => new Enum("Motion", [
+				"Motion" => new EnumTag("Motion", [
 					new Double("", $motion->x),
 					new Double("", $motion->y),
 					new Double("", $motion->z)
 				]),
-				"Rotation" => new Enum("Rotation", [
+				"Rotation" => new EnumTag("Rotation", [
 					new FloatTag("", \lcg_value() * 360),
 					new FloatTag("", 0)
 				]),
-				"Health" => new Short("Health", 5),
+				"Health" => new ShortTag("Health", 5),
 				"Item" => new Compound("Item", [
-					"id" => new Short("id", $item->getId()),
-					"Damage" => new Short("Damage", $item->getDamage()),
+					"id" => new ShortTag("id", $item->getId()),
+					"Damage" => new ShortTag("Damage", $item->getDamage()),
 					"Count" => new Byte("Count", $item->getCount())
 				]),
-				"PickupDelay" => new Short("PickupDelay", $delay)
+				"PickupDelay" => new ShortTag("PickupDelay", $delay)
 			]));
 
 			$itemEntity->spawnToAll();

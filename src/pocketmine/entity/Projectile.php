@@ -31,7 +31,7 @@ use pocketmine\inventory\InventoryHolder;
 use pocketmine\inventory\PlayerInventory;
 use pocketmine\level\MovingObjectPosition;
 use pocketmine\math\Vector3;
-use pocketmine\nbt\tag\Short;
+use pocketmine\nbt\tag\ShortTag;
 
 abstract class Projectile extends Entity{
 	/** @var Entity */
@@ -66,7 +66,7 @@ abstract class Projectile extends Entity{
 
 	public function saveNBT(){
 		parent::saveNBT();
-		$this->namedtag->Age = new Short("Age", $this->age);
+		$this->namedtag->Age = new ShortTag("Age", $this->age);
 	}
 
 	public function attack($damage, $source = EntityDamageEvent::CAUSE_MAGIC){

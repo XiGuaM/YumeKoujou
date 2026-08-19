@@ -36,7 +36,7 @@ use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\Byte;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Double;
-use pocketmine\nbt\tag\Enum;
+use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\network\protocol\ExplodePacket;
 use pocketmine\Server;
@@ -191,17 +191,17 @@ class Explosion{
 			if($block->getId() === Block::TNT){
 				$mot = (new Random())->nextSignedFloat() * M_PI * 2;
 				$tnt = Entity::createEntity("PrimedTNT", $this->level->getChunk($block->x >> 4, $block->z >> 4), new Compound("", [
-					"Pos" => new Enum("Pos", [
+					"Pos" => new EnumTag("Pos", [
 						new Double("", $block->x + 0.5),
 						new Double("", $block->y),
 						new Double("", $block->z + 0.5)
 					]),
-					"Motion" => new Enum("Motion", [
+					"Motion" => new EnumTag("Motion", [
 						new Double("", -\sin($mot) * 0.02),
 						new Double("", 0.2),
 						new Double("", -\cos($mot) * 0.02)
 					]),
-					"Rotation" => new Enum("Rotation", [
+					"Rotation" => new EnumTag("Rotation", [
 						new FloatTag("", 0),
 						new FloatTag("", 0)
 					]),

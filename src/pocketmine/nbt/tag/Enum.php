@@ -22,10 +22,10 @@
 namespace pocketmine\nbt\tag;
 
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\Enum as TagEnum;
+use pocketmine\nbt\tag\EnumTag as TagEnum;
 use pocketmine\utils\Binary;
 
-class Enum extends NamedTag implements \ArrayAccess, \Countable{
+class EnumTag extends NamedTag implements \ArrayAccess, \Countable{
 
 	private $tagType;
 
@@ -114,7 +114,7 @@ class Enum extends NamedTag implements \ArrayAccess, \Countable{
 					$this->{$i} = $tag;
 					break;
 				case NBT::TAG_Short:
-					$tag = new Short(\false);
+					$tag = new ShortTag(\false);
 					$tag->read($nbt);
 					$this->{$i} = $tag;
 					break;

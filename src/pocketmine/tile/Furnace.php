@@ -32,8 +32,8 @@ use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\Byte;
 use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\Short;
+use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ShortTag;
 use pocketmine\network\protocol\ContainerSetDataPacket;
 
 class Furnace extends Tile implements InventoryHolder, Container{
@@ -44,8 +44,8 @@ class Furnace extends Tile implements InventoryHolder, Container{
 		parent::__construct($chunk, $nbt);
 		$this->inventory = new FurnaceInventory($this);
 
-		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof Enum)){
-			$this->namedtag->Items = new Enum("Inventory", []);
+		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof EnumTag)){
+			$this->namedtag->Items = new EnumTag("Inventory", []);
 			$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		}
 
@@ -54,14 +54,14 @@ class Furnace extends Tile implements InventoryHolder, Container{
 		}
 
 		if(!isset($this->namedtag->BurnTime) or $this->namedtag["BurnTime"] < 0){
-			$this->namedtag->BurnTime = new Short("BurnTime", 0);
+			$this->namedtag->BurnTime = new ShortTag("BurnTime", 0);
 		}
 		if(!isset($this->namedtag->CookTime) or $this->namedtag["CookTime"] < 0 or ($this->namedtag["BurnTime"] === 0 and $this->namedtag["CookTime"] > 0)){
-			$this->namedtag->CookTime = new Short("CookTime", 0);
+			$this->namedtag->CookTime = new ShortTag("CookTime", 0);
 		}
 		if(!isset($this->namedtag->MaxTime)){
-			$this->namedtag->MaxTime = new Short("BurnTime", $this->namedtag["BurnTime"]);
-			$this->namedtag->BurnTicks = new Short("BurnTicks", 0);
+			$this->namedtag->MaxTime = new ShortTag("BurnTime", $this->namedtag["BurnTime"]);
+			$this->namedtag->BurnTicks = new ShortTag("BurnTicks", 0);
 		}
 		if($this->namedtag["BurnTime"] > 0){
 			$this->scheduleUpdate();
@@ -78,7 +78,7 @@ class Furnace extends Tile implements InventoryHolder, Container{
 	}
 
 	public function saveNBT(){
-		$this->namedtag->Items = new Enum("Inventory", []);
+		$this->namedtag->Items = new EnumTag("Inventory", []);
 		$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		for($index = 0; $index < $this->getSize(); ++$index){
 			$this->setItem($index, $this->inventory->getItem($index));
@@ -137,8 +137,8 @@ class Furnace extends Tile implements InventoryHolder, Container{
 		$d = new Compound(\false, [
 			new Byte("Count", $item->getCount()),
 			new Byte("Slot", $index),
-			new Short("id", $item->getId()),
-			new Short("Damage", $item->getDamage()),
+			new ShortTag("id", $item->getId()),
+			new ShortTag("Damage", $item->getDamage()),
 		]);
 
 		if($item->getId() === Item::AIR or $item->getCount() <= 0){
@@ -173,9 +173,9 @@ class Furnace extends Tile implements InventoryHolder, Container{
 			return;
 		}
 
-		$this->namedtag->MaxTime = new Short("MaxTime", $ev->getBurnTime());
-		$this->namedtag->BurnTime = new Short("BurnTime", $ev->getBurnTime());
-		$this->namedtag->BurnTicks = new Short("BurnTicks", 0);
+		$this->namedtag->MaxTime = new ShortTag("MaxTime", $ev->getBurnTime());
+		$this->namedtag->BurnTime = new ShortTag("BurnTime", $ev->getBurnTime());
+		$this->namedtag->BurnTicks = new ShortTag("BurnTicks", 0);
 		if($this->getBlock()->getId() === Item::FURNACE){
 			$this->getLevel()->setBlock($this, Block::get(Item::BURNING_FURNACE, $this->getBlock()->getDamage()), \true);
 		}
@@ -209,11 +209,11 @@ class Furnace extends Tile implements InventoryHolder, Container{
 		}
 
 		if($this->namedtag["BurnTime"] > 0){
-			$this->namedtag->BurnTime = new Short("BurnTime", $this->namedtag["BurnTime"] - 1);
-			$this->namedtag->BurnTicks = new Short("BurnTicks", \ceil(($this->namedtag["BurnTime"] / $this->namedtag["MaxTime"] * 200)));
+			$this->namedtag->BurnTime = new ShortTag("BurnTime", $this->namedtag["BurnTime"] - 1);
+			$this->namedtag->BurnTicks = new ShortTag("BurnTicks", \ceil(($this->namedtag["BurnTime"] / $this->namedtag["MaxTime"] * 200)));
 
 			if($smelt instanceof FurnaceRecipe and $canSmelt){
-				$this->namedtag->CookTime = new Short("CookTime", $this->namedtag["CookTime"] + 1);
+				$this->namedtag->CookTime = new ShortTag("CookTime", $this->namedtag["CookTime"] + 1);
 				if($this->namedtag["CookTime"] >= 200){ //10 seconds
 					$product = Item::get($smelt->getResult()->getId(), $smelt->getResult()->getDamage(), $product->getCount() + 1);
 
@@ -228,14 +228,14 @@ class Furnace extends Tile implements InventoryHolder, Container{
 						$this->inventory->setSmelting($raw);
 					}
 
-					$this->namedtag->CookTime = new Short("CookTime", $this->namedtag["CookTime"] - 200);
+					$this->namedtag->CookTime = new ShortTag("CookTime", $this->namedtag["CookTime"] - 200);
 				}
 			}elseif($this->namedtag["BurnTime"] <= 0){
-				$this->namedtag->BurnTime = new Short("BurnTime", 0);
-				$this->namedtag->CookTime = new Short("CookTime", 0);
-				$this->namedtag->BurnTicks = new Short("BurnTicks", 0);
+				$this->namedtag->BurnTime = new ShortTag("BurnTime", 0);
+				$this->namedtag->CookTime = new ShortTag("CookTime", 0);
+				$this->namedtag->BurnTicks = new ShortTag("BurnTicks", 0);
 			}else{
-				$this->namedtag->CookTime = new Short("CookTime", 0);
+				$this->namedtag->CookTime = new ShortTag("CookTime", 0);
 			}
 			$ret = \true;
 		}else{
@@ -243,9 +243,9 @@ class Furnace extends Tile implements InventoryHolder, Container{
 			if($this->getBlock()->getId() === Item::BURNING_FURNACE){
 				$this->getLevel()->setBlock($this, Block::get(Item::FURNACE, $this->getBlock()->getDamage()), \true);
 			}
-			$this->namedtag->BurnTime = new Short("BurnTime", 0);
-			$this->namedtag->CookTime = new Short("CookTime", 0);
-			$this->namedtag->BurnTicks = new Short("BurnTicks", 0);
+			$this->namedtag->BurnTime = new ShortTag("BurnTime", 0);
+			$this->namedtag->CookTime = new ShortTag("CookTime", 0);
+			$this->namedtag->BurnTicks = new ShortTag("BurnTicks", 0);
 		}
 
 		foreach($this->getInventory()->getViewers() as $player){

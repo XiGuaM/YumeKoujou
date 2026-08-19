@@ -67,11 +67,11 @@ use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\Byte;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Double;
-use pocketmine\nbt\tag\Enum;
+use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\Long;
-use pocketmine\nbt\tag\Short;
+use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\protocol\DataPacket;
 use pocketmine\network\query\QueryHandler;
@@ -714,7 +714,7 @@ class Server{
 		$nbt = new Compound(\false, [
 			new Long("firstPlayed", \floor(\microtime(\true) * 1000)),
 			new Long("lastPlayed", \floor(\microtime(\true) * 1000)),
-			new Enum("Pos", [
+			new EnumTag("Pos", [
 				new Double(0, $spawn->x),
 				new Double(1, $spawn->y),
 				new Double(2, $spawn->z)
@@ -725,21 +725,21 @@ class Server{
 			//new Int("SpawnY", (int) $spawn->y),
 			//new Int("SpawnZ", (int) $spawn->z),
 			//new Byte("SpawnForced", 1), //TODO
-			new Enum("Inventory", []),
+			new EnumTag("Inventory", []),
 			new Compound("Achievements", []),
 			new IntTag("playerGameType", $this->getGamemode()),
-			new Enum("Motion", [
+			new EnumTag("Motion", [
 				new Double(0, 0.0),
 				new Double(1, 0.0),
 				new Double(2, 0.0)
 			]),
-			new Enum("Rotation", [
+			new EnumTag("Rotation", [
 				new FloatTag(0, 0.0),
 				new FloatTag(1, 0.0)
 			]),
 			new FloatTag("FallDistance", 0.0),
-			new Short("Fire", 0),
-			new Short("Air", 0),
+			new ShortTag("Fire", 0),
+			new ShortTag("Air", 0),
 			new Byte("OnGround", 1),
 			new Byte("Invulnerable", 0),
 			new StringTag("NameTag", $name),
@@ -764,8 +764,8 @@ class Server{
 			foreach($data->get("inventory") as $slot => $item){
 				if(\count($item) === 3){
 					$nbt->Inventory[$slot + 9] = new Compound(\false, [
-						new Short("id", $item[0]),
-						new Short("Damage", $item[1]),
+						new ShortTag("id", $item[0]),
+						new ShortTag("Damage", $item[1]),
 						new Byte("Count", $item[2]),
 						new Byte("Slot", $slot + 9),
 						new Byte("TrueSlot", $slot + 9)
@@ -776,8 +776,8 @@ class Server{
 				if(isset($nbt->Inventory[$itemSlot + 9])){
 					$item = $nbt->Inventory[$itemSlot + 9];
 					$nbt->Inventory[$slot] = new Compound(\false, [
-						new Short("id", $item["id"]),
-						new Short("Damage", $item["Damage"]),
+						new ShortTag("id", $item["id"]),
+						new ShortTag("Damage", $item["Damage"]),
 						new Byte("Count", $item["Count"]),
 						new Byte("Slot", $slot),
 						new Byte("TrueSlot", $item["TrueSlot"])
@@ -787,8 +787,8 @@ class Server{
 			foreach($data->get("armor") as $slot => $item){
 				if(\count($item) === 2){
 					$nbt->Inventory[$slot + 100] = new Compound(\false, [
-						new Short("id", $item[0]),
-						new Short("Damage", $item[1]),
+						new ShortTag("id", $item[0]),
+						new ShortTag("Damage", $item[1]),
 						new Byte("Count", 1),
 						new Byte("Slot", $slot + 100)
 					]);
