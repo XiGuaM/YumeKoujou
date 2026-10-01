@@ -27,10 +27,10 @@ use pocketmine\level\generator\Generator;
 use pocketmine\level\Level;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\ByteTag;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\Long;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\tile\Spawnable;
 use pocketmine\utils\Binary;
 use pocketmine\utils\ChunkException;
@@ -80,7 +80,7 @@ class McRegion extends BaseLevelProvider{
 			\mkdir($path . "/region", 0777);
 		}
 		//TODO, add extra details
-		$levelData = new Compound("Data", [
+		$levelData = new CompoundTag("Data", [
 			"hardcore" => new ByteTag("hardcore", 0),
 			"initialized" => new ByteTag("initialized", 1),
 			"GameType" => new IntTag("GameType", 0),
@@ -94,13 +94,13 @@ class McRegion extends BaseLevelProvider{
 			"RandomSeed" => new Long("RandomSeed", $seed),
 			"SizeOnDisk" => new Long("SizeOnDisk", 0),
 			"Time" => new Long("Time", 0),
-			"generatorName" => new String("generatorName", Generator::getGeneratorName($generator)),
-			"generatorOptions" => new String("generatorOptions", isset($options["preset"]) ? $options["preset"] : ""),
-			"LevelName" => new String("LevelName", $name),
-			"GameRules" => new Compound("GameRules", [])
+			"generatorName" => new StringTag("generatorName", Generator::getGeneratorName($generator)),
+			"generatorOptions" => new StringTag("generatorOptions", isset($options["preset"]) ? $options["preset"] : ""),
+			"LevelName" => new StringTag("LevelName", $name),
+			"GameRules" => new CompoundTag("GameRules", [])
 		]);
 		$nbt = new NBT(NBT::BIG_ENDIAN);
-		$nbt->setData(new Compound(\null, [
+		$nbt->setData(new CompoundTag(\null, [
 			"Data" => $levelData
 		]));
 		$buffer = $nbt->writeCompressed();

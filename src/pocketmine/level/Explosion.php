@@ -34,10 +34,10 @@ use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Math;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\ByteTag;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\Double;
 use pocketmine\nbt\tag\EnumTag;
-use pocketmine\nbt\tag\Float;
+use pocketmine\nbt\tag\FloatTag;
 use pocketmine\network\protocol\ExplodePacket;
 use pocketmine\Server;
 use pocketmine\utils\Random;
@@ -190,7 +190,7 @@ class Explosion{
 		foreach($this->affectedBlocks as $block){
 			if($block->getId() === Block::TNT){
 				$mot = (new Random())->nextSignedFloat() * M_PI * 2;
-				$tnt = Entity::createEntity("PrimedTNT", $this->level->getChunk($block->x >> 4, $block->z >> 4), new Compound("", [
+				$tnt = Entity::createEntity("PrimedTNT", $this->level->getChunk($block->x >> 4, $block->z >> 4), new CompoundTag("", [
 					"Pos" => new EnumTag("Pos", [
 						new Double("", $block->x + 0.5),
 						new Double("", $block->y),
@@ -202,8 +202,8 @@ class Explosion{
 						new Double("", -\cos($mot) * 0.02)
 					]),
 					"Rotation" => new EnumTag("Rotation", [
-						new Float("", 0),
-						new Float("", 0)
+						new FloatTag("", 0),
+						new FloatTag("", 0)
 					]),
 					"Fuse" => new ByteTag("Fuse", \mt_rand(10, 30))
 				]));

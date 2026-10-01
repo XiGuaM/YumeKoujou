@@ -46,12 +46,12 @@ use pocketmine\math\Vector3;
 use pocketmine\metadata\Metadatable;
 use pocketmine\metadata\MetadataValue;
 use pocketmine\nbt\tag\ByteTag;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\Double;
 use pocketmine\nbt\tag\EnumTag;
-use pocketmine\nbt\tag\Float;
+use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\Short;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\Network;
 use pocketmine\network\protocol\MovePlayerPacket;
 use pocketmine\network\protocol\RemoveEntityPacket;
@@ -163,7 +163,7 @@ abstract class Entity extends Location implements Metadatable{
 	protected $timings;
 
 
-	public function __construct(FullChunk $chunk, Compound $nbt){
+	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		if($chunk === \null or $chunk->getProvider() === \null){
 			throw new ChunkException("Invalid garbage Chunk given to Entity");
 		}
@@ -196,7 +196,7 @@ abstract class Entity extends Location implements Metadatable{
 		$this->setMotion(new Vector3($this->namedtag["Motion"][0], $this->namedtag["Motion"][1], $this->namedtag["Motion"][2]));
 
 		if(!isset($this->namedtag->FallDistance)){
-			$this->namedtag->FallDistance = new Float("FallDistance", 0);
+			$this->namedtag->FallDistance = new FloatTag("FallDistance", 0);
 		}
 		$this->fallDistance = $this->namedtag["FallDistance"];
 
@@ -233,12 +233,12 @@ abstract class Entity extends Location implements Metadatable{
 	/**
 	 * @param int|string $type
 	 * @param FullChunk  $chunk
-	 * @param Compound   $nbt
+	 * @param CompoundTag   $nbt
 	 * @param            $args
 	 *
 	 * @return Entity
 	 */
-	public static function createEntity($type, FullChunk $chunk, Compound $nbt, ...$args){
+	public static function createEntity($type, FullChunk $chunk, CompoundTag $nbt, ...$args){
 		if(isset(self::$knownEntities[$type])){
 			$class = self::$knownEntities[$type];
 			return new $class($chunk, $nbt, ...$args);
@@ -275,7 +275,7 @@ abstract class Entity extends Location implements Metadatable{
 
 	public function saveNBT(){
 		if(!($this instanceof Player)){
-			$this->namedtag->id = new String("id", $this->getSaveId());
+			$this->namedtag->id = new StringTag("id", $this->getSaveId());
 		}
 
 		$this->namedtag->Pos = new EnumTag("Pos", [
@@ -291,11 +291,11 @@ abstract class Entity extends Location implements Metadatable{
 		]);
 
 		$this->namedtag->Rotation = new EnumTag("Rotation", [
-			new Float(0, $this->yaw),
-			new Float(1, $this->pitch)
+			new FloatTag(0, $this->yaw),
+			new FloatTag(1, $this->pitch)
 		]);
 
-		$this->namedtag->FallDistance = new Float("FallDistance", $this->fallDistance);
+		$this->namedtag->FallDistance = new FloatTag("FallDistance", $this->fallDistance);
 		$this->namedtag->Fire = new Short("Fire", $this->fireTicks);
 		$this->namedtag->Air = new Short("Air", $this->airTicks);
 		$this->namedtag->OnGround = new ByteTag("OnGround", $this->onGround == \true ? 1 : 0);

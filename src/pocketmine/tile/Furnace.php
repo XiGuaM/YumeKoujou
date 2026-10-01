@@ -31,7 +31,7 @@ use pocketmine\item\Item;
 use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\ByteTag;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\Short;
 use pocketmine\network\protocol\ContainerSetDataPacket;
@@ -40,7 +40,7 @@ class Furnace extends Tile implements InventoryHolder, Container{
 	/** @var FurnaceInventory */
 	protected $inventory;
 
-	public function __construct(FullChunk $chunk, Compound $nbt){
+	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);
 		$this->inventory = new FurnaceInventory($this);
 
@@ -134,7 +134,7 @@ class Furnace extends Tile implements InventoryHolder, Container{
 	public function setItem($index, Item $item){
 		$i = $this->getSlotIndex($index);
 
-		$d = new Compound(\false, [
+		$d = new CompoundTag(\false, [
 			new ByteTag("Count", $item->getCount()),
 			new ByteTag("Slot", $index),
 			new Short("id", $item->getId()),

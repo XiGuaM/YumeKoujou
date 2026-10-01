@@ -40,7 +40,7 @@ class AsyncWorker extends Worker{
 		$this->loader->register(\true);
 	}
 
-	public function start($options = PTHREADS_INHERIT_NONE){
+	public function start(int $options = NULL){
 		parent::start(PTHREADS_INHERIT_CONSTANTS | PTHREADS_INHERIT_FUNCTIONS);
 	}
 }

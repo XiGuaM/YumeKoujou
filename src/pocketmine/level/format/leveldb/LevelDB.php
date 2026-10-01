@@ -27,10 +27,10 @@ use pocketmine\level\generator\Generator;
 use pocketmine\level\Level;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\ByteTag;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\Long;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\tile\Spawnable;
 use pocketmine\utils\Binary;
 use pocketmine\utils\ChunkException;
@@ -53,18 +53,18 @@ class LevelDB extends BaseLevelProvider{
 		$nbt = new NBT(NBT::LITTLE_ENDIAN);
 		$nbt->read(\substr(\file_get_contents($this->getPath() . "level.dat"), 8));
 		$levelData = $nbt->getData();
-		if($levelData instanceof Compound){
+		if($levelData instanceof CompoundTag){
 			$this->levelData = $levelData;
 		}else{
 			throw new LevelException("Invalid level.dat");
 		}
 
 		if(!isset($this->levelData->generatorName)){
-			$this->levelData->generatorName = new String("generatorName", Generator::getGenerator("DEFAULT"));
+			$this->levelData->generatorName = new StringTag("generatorName", Generator::getGenerator("DEFAULT"));
 		}
 
 		if(!isset($this->levelData->generatorOptions)){
-			$this->levelData->generatorOptions = new String("generatorOptions", "");
+			$this->levelData->generatorOptions = new StringTag("generatorOptions", "");
 		}
 
 		$this->db = new \LevelDB($this->path . "/db", [
@@ -96,7 +96,7 @@ class LevelDB extends BaseLevelProvider{
 			\mkdir($path . "/db", 0777, \true);
 		}
 		//TODO, add extra details
-		$levelData = new Compound(\null, [
+		$levelData = new CompoundTag(\null, [
 			"hardcore" => new ByteTag("hardcore", 0),
 			"initialized" => new ByteTag("initialized", 1),
 			"GameType" => new IntTag("GameType", 0),
@@ -110,10 +110,10 @@ class LevelDB extends BaseLevelProvider{
 			"RandomSeed" => new Long("RandomSeed", $seed),
 			"SizeOnDisk" => new Long("SizeOnDisk", 0),
 			"Time" => new Long("Time", 0),
-			"generatorName" => new String("generatorName", Generator::getGeneratorName($generator)),
-			"generatorOptions" => new String("generatorOptions", isset($options["preset"]) ? $options["preset"] : ""),
-			"LevelName" => new String("LevelName", $name),
-			"GameRules" => new Compound("GameRules", [])
+			"generatorName" => new StringTag("generatorName", Generator::getGeneratorName($generator)),
+			"generatorOptions" => new StringTag("generatorOptions", isset($options["preset"]) ? $options["preset"] : ""),
+			"LevelName" => new StringTag("LevelName", $name),
+			"GameRules" => new CompoundTag("GameRules", [])
 		]);
 		$nbt = new NBT(NBT::LITTLE_ENDIAN);
 		$nbt->setData($levelData);

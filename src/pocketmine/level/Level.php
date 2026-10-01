@@ -75,13 +75,13 @@ use pocketmine\metadata\BlockMetadataStore;
 use pocketmine\metadata\Metadatable;
 use pocketmine\metadata\MetadataValue;
 use pocketmine\nbt\tag\ByteTag;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\Double;
 use pocketmine\nbt\tag\EnumTag;
-use pocketmine\nbt\tag\Float;
+use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\Short;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\protocol\SetTimePacket;
 use pocketmine\network\protocol\UpdateBlockPacket;
 use pocketmine\Player;
@@ -1169,7 +1169,7 @@ class Level implements ChunkManager, Metadatable{
 	public function dropItem(Vector3 $source, Item $item, Vector3 $motion = \null, $delay = 10){
 		$motion = $motion === \null ? new Vector3(\lcg_value() * 0.2 - 0.1, 0.2, \lcg_value() * 0.2 - 0.1) : $motion;
 		if($item->getId() > 0 and $item->getCount() > 0){
-			$itemEntity = Entity::createEntity("Item", $this->getChunk($source->getX() >> 4, $source->getZ() >> 4), new Compound("", [
+			$itemEntity = Entity::createEntity("Item", $this->getChunk($source->getX() >> 4, $source->getZ() >> 4), new CompoundTag("", [
 				"Pos" => new EnumTag("Pos", [
 					new Double("", $source->getX()),
 					new Double("", $source->getY()),
@@ -1182,11 +1182,11 @@ class Level implements ChunkManager, Metadatable{
 					new Double("", $motion->z)
 				]),
 				"Rotation" => new EnumTag("Rotation", [
-					new Float("", \lcg_value() * 360),
-					new Float("", 0)
+					new FloatTag("", \lcg_value() * 360),
+					new FloatTag("", 0)
 				]),
 				"Health" => new Short("Health", 5),
-				"Item" => new Compound("Item", [
+				"Item" => new CompoundTag("Item", [
 					"id" => new Short("id", $item->getId()),
 					"Damage" => new Short("Damage", $item->getDamage()),
 					"Count" => new ByteTag("Count", $item->getCount())
@@ -1401,18 +1401,18 @@ class Level implements ChunkManager, Metadatable{
 		}
 
 		if($hand->getId() === Item::SIGN_POST or $hand->getId() === Item::WALL_SIGN){
-			$tile = Tile::createTile("Sign", $this->getChunk($block->x >> 4, $block->z >> 4), new Compound(\false, [
-				"id" => new String("id", Tile::SIGN),
+			$tile = Tile::createTile("Sign", $this->getChunk($block->x >> 4, $block->z >> 4), new CompoundTag(\false, [
+				"id" => new StringTag("id", Tile::SIGN),
 				"x" => new IntTag("x", $block->x),
 				"y" => new IntTag("y", $block->y),
 				"z" => new IntTag("z", $block->z),
-				"Text1" => new String("Text1", ""),
-				"Text2" => new String("Text2", ""),
-				"Text3" => new String("Text3", ""),
-				"Text4" => new String("Text4", "")
+				"Text1" => new StringTag("Text1", ""),
+				"Text2" => new StringTag("Text2", ""),
+				"Text3" => new StringTag("Text3", ""),
+				"Text4" => new StringTag("Text4", "")
 			]));
 			if($player instanceof Player){
-				$tile->namedtag->Creator = new String("Creator", $player->getName());
+				$tile->namedtag->Creator = new StringTag("Creator", $player->getName());
 			}
 		}
 		$item->setCount($item->getCount() - 1);

@@ -23,10 +23,10 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\IntTag;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
 use pocketmine\tile\Furnace;
 use pocketmine\tile\Tile;
@@ -64,9 +64,9 @@ class BurningFurnace extends Solid{
 		];
 		$this->meta = $faces[$player instanceof Player ? $player->getDirection() : 0];
 		$this->getLevel()->setBlock($block, $this, \true, \true);
-		$nbt = new Compound(\false, [
+		$nbt = new CompoundTag(\false, [
 			new EnumTag("Items", []),
-			new String("id", Tile::FURNACE),
+			new StringTag("id", Tile::FURNACE),
 			new IntTag("x", $this->x),
 			new IntTag("y", $this->y),
 			new IntTag("z", $this->z)
@@ -90,9 +90,9 @@ class BurningFurnace extends Solid{
 			if($t instanceof Furnace){
 				$furnace = $t;
 			}else{
-				$nbt = new Compound(\false, [
+				$nbt = new CompoundTag(\false, [
 					new EnumTag("Items", []),
-					new String("id", Tile::FURNACE),
+					new StringTag("id", Tile::FURNACE),
 					new IntTag("x", $this->x),
 					new IntTag("y", $this->y),
 					new IntTag("z", $this->z)

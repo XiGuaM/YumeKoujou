@@ -25,8 +25,8 @@ use pocketmine\level\format\FullChunk;
 use pocketmine\level\format\LevelProvider;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\ByteTag;
-use pocketmine\nbt\tag\ByteArray;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\ByteArrayTag;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\IntArrayTag;
@@ -148,7 +148,7 @@ class RegionLoader{
 	}
 
 	public function generateChunk($x, $z){
-		$nbt = new Compound("Level", []);
+		$nbt = new CompoundTag("Level", []);
 		$nbt->xPos = new IntTag("xPos", ($this->getX() * 32) + $x);
 		$nbt->zPos = new IntTag("zPos", ($this->getZ() * 32) + $z);
 		$nbt->LastUpdate = new Long("LastUpdate", 0);
@@ -156,14 +156,14 @@ class RegionLoader{
 		$nbt->TerrainPopulated = new ByteTag("TerrainPopulated", 0);
 		$nbt->V = new ByteTag("V", self::VERSION);
 		$nbt->InhabitedTime = new Long("InhabitedTime", 0);
-		$nbt->Biomes = new ByteArray("Biomes", \str_repeat(\chr(-1), 256));
+		$nbt->Biomes = new ByteArrayTag("Biomes", \str_repeat(\chr(-1), 256));
 		$nbt->HeightMap = new IntArrayTag("HeightMap", \array_fill(0, 256, 127));
 		$nbt->BiomeColors = new IntArrayTag("BiomeColors", \array_fill(0, 256, (\PHP_INT_SIZE === 8 ? \unpack("N", "\x00\x85\xb2\x4a")[1] << 32 >> 32 : \unpack("N", "\x00\x85\xb2\x4a")[1])));
 
-		$nbt->Blocks = new ByteArray("Blocks", \str_repeat("\x00", 32768));
-		$nbt->Data = new ByteArray("Data", $half = \str_repeat("\x00", 16384));
-		$nbt->SkyLight = new ByteArray("SkyLight", $half);
-		$nbt->BlockLight = new ByteArray("BlockLight", $half);
+		$nbt->Blocks = new ByteArrayTag("Blocks", \str_repeat("\x00", 32768));
+		$nbt->Data = new ByteArrayTag("Data", $half = \str_repeat("\x00", 16384));
+		$nbt->SkyLight = new ByteArrayTag("SkyLight", $half);
+		$nbt->BlockLight = new ByteArrayTag("BlockLight", $half);
 
 		$nbt->Entities = new EnumTag("Entities", []);
 		$nbt->Entities->setTagType(NBT::TAG_Compound);
@@ -173,7 +173,7 @@ class RegionLoader{
 		$nbt->TileTicks->setTagType(NBT::TAG_Compound);
 		$writer = new NBT(NBT::BIG_ENDIAN);
 		$nbt->setName("Level");
-		$writer->setData(new Compound("", ["Level" => $nbt]));
+		$writer->setData(new CompoundTag("", ["Level" => $nbt]));
 		$chunkData = $writer->writeCompressed(ZLIB_ENCODING_DEFLATE, self::$COMPRESSION_LEVEL);
 
 		if($chunkData !== \false){

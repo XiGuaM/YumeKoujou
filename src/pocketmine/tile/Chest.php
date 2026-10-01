@@ -29,11 +29,11 @@ use pocketmine\level\format\FullChunk;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\ByteTag;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\Short;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\StringTag;
 
 class Chest extends Spawnable implements InventoryHolder, Container{
 
@@ -42,7 +42,7 @@ class Chest extends Spawnable implements InventoryHolder, Container{
 	/** @var DoubleChestInventory */
 	protected $doubleInventory = \null;
 
-	public function __construct(FullChunk $chunk, Compound $nbt){
+	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);
 		$this->inventory = new ChestInventory($this);
 
@@ -126,7 +126,7 @@ class Chest extends Spawnable implements InventoryHolder, Container{
 	public function setItem($index, Item $item){
 		$i = $this->getSlotIndex($index);
 
-		$d = new Compound(\false, [
+		$d = new CompoundTag(\false, [
 			new ByteTag("Count", $item->getCount()),
 			new ByteTag("Slot", $index),
 			new Short("id", $item->getId()),
@@ -253,8 +253,8 @@ class Chest extends Spawnable implements InventoryHolder, Container{
 
 	public function getSpawnCompound(){
 		if($this->isPaired()){
-			return new Compound("", [
-				new String("id", Tile::CHEST),
+			return new CompoundTag("", [
+				new StringTag("id", Tile::CHEST),
 				new IntTag("x", (int) $this->x),
 				new IntTag("y", (int) $this->y),
 				new IntTag("z", (int) $this->z),
@@ -262,8 +262,8 @@ class Chest extends Spawnable implements InventoryHolder, Container{
 				new IntTag("pairz", (int) $this->namedtag["pairz"])
 			]);
 		}else{
-			return new Compound("", [
-				new String("id", Tile::CHEST),
+			return new CompoundTag("", [
+				new StringTag("id", Tile::CHEST),
 				new IntTag("x", (int) $this->x),
 				new IntTag("y", (int) $this->y),
 				new IntTag("z", (int) $this->z)

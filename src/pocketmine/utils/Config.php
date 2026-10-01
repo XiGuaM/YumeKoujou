@@ -135,7 +135,7 @@ class Config{
 						break;
 					case Config::YAML:
 						$content = self::fixYAMLIndexes($content);
-						$this->config = yaml_parse($content);
+						$this->config = @yaml_parse($content);
 						break;
 					case Config::SERIALIZED:
 						$this->config = \unserialize($content);

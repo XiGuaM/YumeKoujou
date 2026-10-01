@@ -25,18 +25,18 @@
 namespace pocketmine\nbt;
 
 use pocketmine\nbt\tag\ByteTag;
-use pocketmine\nbt\tag\ByteArray;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\ByteArrayTag;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\Double;
 use pocketmine\nbt\tag\End;
 use pocketmine\nbt\tag\EnumTag;
-use pocketmine\nbt\tag\Float;
+use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\IntArrayTag;
 use pocketmine\nbt\tag\Long;
 use pocketmine\nbt\tag\NamedTAG;
 use pocketmine\nbt\tag\Short;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\Tag;
 use pocketmine\utils\Utils;
 
@@ -111,7 +111,7 @@ class NBT{
 
 	public function write(){
 		$this->offset = 0;
-		if($this->data instanceof Compound){
+		if($this->data instanceof CompoundTag){
 			$this->writeTag($this->data);
 
 			return $this->buffer;
@@ -152,7 +152,7 @@ class NBT{
 				$tag->read($this);
 				break;
 			case NBT::TAG_Float:
-				$tag = new Float($this->getString());
+				$tag = new FloatTag($this->getString());
 				$tag->read($this);
 				break;
 			case NBT::TAG_Double:
@@ -160,11 +160,11 @@ class NBT{
 				$tag->read($this);
 				break;
 			case NBT::TAG_ByteArray:
-				$tag = new ByteArray($this->getString());
+				$tag = new ByteArrayTag($this->getString());
 				$tag->read($this);
 				break;
 			case NBT::TAG_String:
-				$tag = new String($this->getString());
+				$tag = new StringTag($this->getString());
 				$tag->read($this);
 				break;
 			case NBT::TAG_Enum:
@@ -172,7 +172,7 @@ class NBT{
 				$tag->read($this);
 				break;
 			case NBT::TAG_Compound:
-				$tag = new Compound($this->getString());
+				$tag = new CompoundTag($this->getString());
 				$tag->read($this);
 				break;
 			case NBT::TAG_IntArray:
@@ -259,9 +259,9 @@ class NBT{
 	}
 
 	private function toArray(array &$data, Tag $tag){
-		/** @var Compound[]|EnumTag[]|IntArrayTag[] $tag */
+		/** @var CompoundTag[]|EnumTag[]|IntArrayTag[] $tag */
 		foreach($tag as $key => $value){
-			if($value instanceof Compound or $value instanceof EnumTag or $value instanceof IntArrayTag){
+			if($value instanceof CompoundTag or $value instanceof EnumTag or $value instanceof IntArrayTag){
 				$data[$key] = [];
 				$this->toArray($data[$key], $value);
 			}else{
@@ -283,17 +283,17 @@ class NBT{
 						$isIntArray = \false;
 					}
 				}
-				$tag[$key] = $isNumeric ? ($isIntArray ? new IntArray($key, []) : new EnumTag($key, [])) : new Compound($key, []);
+				$tag[$key] = $isNumeric ? ($isIntArray ? new IntArrayTag($key, []) : new EnumTag($key, [])) : new CompoundTag($key, []);
 				$this->fromArray($tag[$key], $value);
 			}elseif(\is_int($value)){
 				$tag[$key] = new IntTag($key, $value);
 			}elseif(\is_float($value)){
-				$tag[$key] = new Float($key, $value);
+				$tag[$key] = new FloatTag($key, $value);
 			}elseif(\is_string($value)){
 				if(Utils::printable($value) !== $value){
-					$tag[$key] = new ByteArray($key, $value);
+					$tag[$key] = new ByteArrayTag($key, $value);
 				}else{
-					$tag[$key] = new String($key, $value);
+					$tag[$key] = new StringTag($key, $value);
 				}
 			}elseif(\is_bool($value)){
 				$tag[$key] = new ByteTag($key, $value ? 1 : 0);
@@ -302,7 +302,7 @@ class NBT{
 	}
 
 	public function setArray(array $data){
-		$this->data = new Compound(\null, []);
+		$this->data = new CompoundTag(\null, []);
 		$this->fromArray($this->data, $data);
 	}
 
@@ -310,7 +310,7 @@ class NBT{
 		return $this->data;
 	}
 
-	public function setData(Compound $data){
+	public function setData(CompoundTag $data){
 		$this->data = $data;
 	}
 

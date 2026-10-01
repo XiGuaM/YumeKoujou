@@ -22,24 +22,9 @@
 namespace pocketmine\nbt\tag;
 
 use pocketmine\nbt\NBT;
-
 use pocketmine\utils\Binary;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class Compound extends NamedTag implements \ArrayAccess{
+class CompoundTag extends NamedTag implements \ArrayAccess{
 
 	/**
 	 * @param string     $name
@@ -52,7 +37,7 @@ class Compound extends NamedTag implements \ArrayAccess{
 		}
 	}
 
-	public function offsetExists($offset){
+	public function offsetExists($offset): bool{
 		return isset($this->{$offset});
 	}
 

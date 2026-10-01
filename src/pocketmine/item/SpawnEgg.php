@@ -25,10 +25,10 @@ use pocketmine\block\Block;
 use pocketmine\entity\Entity;
 use pocketmine\level\format\FullChunk;
 use pocketmine\level\Level;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\Double;
 use pocketmine\nbt\tag\EnumTag;
-use pocketmine\nbt\tag\Float;
+use pocketmine\nbt\tag\FloatTag;
 use pocketmine\Player;
 
 class SpawnEgg extends Item{
@@ -48,7 +48,7 @@ class SpawnEgg extends Item{
 			return \false;
 		}
 
-		$nbt = new Compound("", [
+		$nbt = new CompoundTag("", [
 			"Pos" => new EnumTag("Pos", [
 				new Double("", $block->getX() + 0.5),
 				new Double("", $block->getY()),
@@ -60,8 +60,8 @@ class SpawnEgg extends Item{
 				new Double("", 0)
 			]),
 			"Rotation" => new EnumTag("Rotation", [
-				new Float("", \lcg_value() * 360),
-				new Float("", 0)
+				new FloatTag("", \lcg_value() * 360),
+				new FloatTag("", 0)
 			]),
 		]);
 

@@ -22,7 +22,7 @@
 namespace pocketmine\entity;
 
 use pocketmine\level\format\FullChunk;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
@@ -38,7 +38,7 @@ class Arrow extends Projectile{
 
 	protected $damage = 6;
 
-	public function __construct(FullChunk $chunk, Compound $nbt, Entity $shootingEntity = \null){
+	public function __construct(FullChunk $chunk, CompoundTag $nbt, Entity $shootingEntity = \null){
 		$this->shootingEntity = $shootingEntity;
 		parent::__construct($chunk, $nbt);
 	}

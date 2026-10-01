@@ -26,9 +26,9 @@ use pocketmine\level\generator\Generator;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\utils\LevelException;
 
 abstract class BaseLevelProvider implements LevelProvider{
@@ -36,7 +36,7 @@ abstract class BaseLevelProvider implements LevelProvider{
 	protected $level;
 	/** @var string */
 	protected $path;
-	/** @var Compound */
+	/** @var CompoundTag */
 	protected $levelData;
 
 	public function __construct(Level $level, $path){
@@ -48,18 +48,18 @@ abstract class BaseLevelProvider implements LevelProvider{
 		$nbt = new NBT(NBT::BIG_ENDIAN);
 		$nbt->readCompressed(\file_get_contents($this->getPath() . "level.dat"));
 		$levelData = $nbt->getData();
-		if($levelData->Data instanceof Compound){
+		if($levelData->Data instanceof CompoundTag){
 			$this->levelData = $levelData->Data;
 		}else{
 			throw new LevelException("Invalid level.dat");
 		}
 
 		if(!isset($this->levelData->generatorName)){
-			$this->levelData->generatorName = new String("generatorName", Generator::getGenerator("DEFAULT"));
+			$this->levelData->generatorName = new StringTag("generatorName", Generator::getGenerator("DEFAULT"));
 		}
 
 		if(!isset($this->levelData->generatorOptions)){
-			$this->levelData->generatorOptions = new String("generatorOptions", "");
+			$this->levelData->generatorOptions = new StringTag("generatorOptions", "");
 		}
 	}
 
@@ -110,7 +110,7 @@ abstract class BaseLevelProvider implements LevelProvider{
 	}
 
 	/**
-	 * @return Compound
+	 * @return CompoundTag
 	 */
 	public function getLevelData(){
 		return $this->levelData;
@@ -118,7 +118,7 @@ abstract class BaseLevelProvider implements LevelProvider{
 
 	public function saveLevelData(){
 		$nbt = new NBT(NBT::BIG_ENDIAN);
-		$nbt->setData(new Compound(\null, [
+		$nbt->setData(new CompoundTag(\null, [
 			"Data" => $this->levelData
 		]));
 		$buffer = $nbt->writeCompressed();

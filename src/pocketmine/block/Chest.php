@@ -24,10 +24,10 @@ namespace pocketmine\block;
 use pocketmine\item\Item;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\IntTag;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
 use pocketmine\tile\Chest as TileChest;
 use pocketmine\tile\Tile;
@@ -91,9 +91,9 @@ class Chest extends Transparent{
 		}
 
 		$this->getLevel()->setBlock($block, $this, \true, \true);
-		$nbt = new Compound(\false, [
+		$nbt = new CompoundTag(\false, [
 			new EnumTag("Items", []),
-			new String("id", Tile::CHEST),
+			new StringTag("id", Tile::CHEST),
 			new IntTag("x", $this->x),
 			new IntTag("y", $this->y),
 			new IntTag("z", $this->z)
@@ -131,9 +131,9 @@ class Chest extends Transparent{
 			if($t instanceof TileChest){
 				$chest = $t;
 			}else{
-				$nbt = new Compound(\false, [
+				$nbt = new CompoundTag(\false, [
 					new EnumTag("Items", []),
-					new String("id", Tile::CHEST),
+					new StringTag("id", Tile::CHEST),
 					new IntTag("x", $this->x),
 					new IntTag("y", $this->y),
 					new IntTag("z", $this->z)

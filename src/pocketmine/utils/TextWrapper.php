@@ -43,7 +43,7 @@ abstract class TextWrapper{
 		self::$allowedCharsArray = [];
 		$len = \strlen(self::$allowedChars);
 		for($i = 0; $i < $len; ++$i){
-			self::$allowedCharsArray[self::$allowedChars{$i}] = self::$characterWidths[$i];
+			self::$allowedCharsArray[self::$allowedChars[$i]] = self::$characterWidths[$i];
 		}
 	}
 
@@ -54,7 +54,7 @@ abstract class TextWrapper{
 		$lineLength = 0;
 
 		for($i = 0; $i < $len; ++$i){
-			$char = $text{$i};
+			$char = $text[$i];
 
 			if($char === "\n"){
 				$lineLength = 0;

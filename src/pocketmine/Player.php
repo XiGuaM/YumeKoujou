@@ -80,12 +80,12 @@ use pocketmine\math\Vector3;
 use pocketmine\metadata\MetadataValue;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\ByteTag;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\Double;
 use pocketmine\nbt\tag\EnumTag;
-use pocketmine\nbt\tag\Float;
+use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\protocol\AdventureSettingsPacket;
 use pocketmine\network\protocol\AnimatePacket;
 use pocketmine\network\protocol\DataPacket;
@@ -240,15 +240,15 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 	}
 
 	public function getFirstPlayed(){
-		return $this->namedtag instanceof Compound ? $this->namedtag["firstPlayed"] : \null;
+		return $this->namedtag instanceof CompoundTag ? $this->namedtag["firstPlayed"] : \null;
 	}
 
 	public function getLastPlayed(){
-		return $this->namedtag instanceof Compound ? $this->namedtag["lastPlayed"] : \null;
+		return $this->namedtag instanceof CompoundTag ? $this->namedtag["lastPlayed"] : \null;
 	}
 
 	public function hasPlayedBefore(){
-		return $this->namedtag instanceof Compound;
+		return $this->namedtag instanceof CompoundTag;
 	}
 
 	protected function initEntity(){
@@ -426,7 +426,7 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 		$this->interface = $interface;
 		$this->windows = new \SplObjectStorage();
 		$this->perm = new PermissibleBase($this);
-		$this->namedtag = new Compound();
+		$this->namedtag = new CompoundTag();
 		$this->server = Server::getInstance();
 		$this->lastBreak = \microtime(\true);
 		$this->ip = $ip;
@@ -1477,7 +1477,7 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 
 				$nbt = $this->server->getOfflinePlayerData($this->username);
 				if(!isset($nbt->NameTag)){
-					$nbt->NameTag = new String("NameTag", $this->username);
+					$nbt->NameTag = new StringTag("NameTag", $this->username);
 				}else{
 					$nbt["NameTag"] = $this->username;
 				}
@@ -1496,7 +1496,7 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 					$this->setLevel($level, \true);
 				}
 
-				if(!($nbt instanceof Compound)){
+				if(!($nbt instanceof CompoundTag)){
 					$this->close(TextFormat::YELLOW . $this->username . " has left the game", "Invalid data");
 
 					return;
@@ -1764,7 +1764,7 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 					}
 
 					if($item->getId() === Item::SNOWBALL){
-						$nbt = new Compound("", [
+						$nbt = new CompoundTag("", [
 							"Pos" => new EnumTag("Pos", [
 								new Double("", $this->x),
 								new Double("", $this->y + $this->getEyeHeight()),
@@ -1776,8 +1776,8 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 								new Double("", \cos($this->yaw / 180 * M_PI) * \cos($this->pitch / 180 * M_PI))
 							]),
 							"Rotation" => new EnumTag("Rotation", [
-								new Float("", $this->yaw),
-								new Float("", $this->pitch)
+								new FloatTag("", $this->yaw),
+								new FloatTag("", $this->pitch)
 							]),
 						]);
 
@@ -1823,7 +1823,7 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 							}
 
 
-							$nbt = new Compound("", [
+							$nbt = new CompoundTag("", [
 								"Pos" => new EnumTag("Pos", [
 									new Double("", $this->x),
 									new Double("", $this->y + $this->getEyeHeight()),
@@ -1835,8 +1835,8 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 									new Double("", \cos($this->yaw / 180 * M_PI) * \cos($this->pitch / 180 * M_PI))
 								]),
 								"Rotation" => new EnumTag("Rotation", [
-									new Float("", $this->yaw),
-									new Float("", $this->pitch)
+									new FloatTag("", $this->yaw),
+									new FloatTag("", $this->pitch)
 								]),
 							]);
 
@@ -2480,7 +2480,7 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 
 		parent::saveNBT();
 		if($this->level instanceof Level){
-			$this->namedtag->Level = new String("Level", $this->level->getName());
+			$this->namedtag->Level = new StringTag("Level", $this->level->getName());
 			if($this->spawnPosition instanceof Position and $this->spawnPosition->getLevel() instanceof Level){
 				$this->namedtag["SpawnLevel"] = $this->spawnPosition->getLevel()->getName();
 				$this->namedtag["SpawnX"] = (int) $this->spawnPosition->x;
@@ -2495,7 +2495,7 @@ class Player extends Human implements CommandSender, InventoryHolder, IPlayer{
 			$this->namedtag["playerGameType"] = $this->gamemode;
 			$this->namedtag["lastPlayed"] = \floor(\microtime(\true) * 1000);
 
-			if($this->username != "" and $this->namedtag instanceof Compound){
+			if($this->username != "" and $this->namedtag instanceof CompoundTag){
 				$this->server->saveOfflinePlayerData($this->username, $this->namedtag);
 			}
 		}

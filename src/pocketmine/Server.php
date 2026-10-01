@@ -65,14 +65,14 @@ use pocketmine\metadata\LevelMetadataStore;
 use pocketmine\metadata\PlayerMetadataStore;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\ByteTag;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\Double;
 use pocketmine\nbt\tag\EnumTag;
-use pocketmine\nbt\tag\Float;
+use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\Long;
 use pocketmine\nbt\tag\Short;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\protocol\DataPacket;
 use pocketmine\network\query\QueryHandler;
 use pocketmine\network\RakLibInterface;
@@ -692,7 +692,7 @@ class Server{
 	/**
 	 * @param string $name
 	 *
-	 * @return Compound
+	 * @return CompoundTag
 	 */
 	public function getOfflinePlayerData($name){
 		$name = \strtolower($name);
@@ -711,7 +711,7 @@ class Server{
 			$this->logger->notice("Player data not found for \"" . $name . "\", creating new profile");
 		}
 		$spawn = $this->getDefaultLevel()->getSafeSpawn();
-		$nbt = new Compound(\false, [
+		$nbt = new CompoundTag(\false, [
 			new Long("firstPlayed", \floor(\microtime(\true) * 1000)),
 			new Long("lastPlayed", \floor(\microtime(\true) * 1000)),
 			new EnumTag("Pos", [
@@ -719,14 +719,14 @@ class Server{
 				new Double(1, $spawn->y),
 				new Double(2, $spawn->z)
 			]),
-			new String("Level", $this->getDefaultLevel()->getName()),
+			new StringTag("Level", $this->getDefaultLevel()->getName()),
 			//new String("SpawnLevel", $this->getDefaultLevel()->getName()),
 			//new Int("SpawnX", (int) $spawn->x),
 			//new Int("SpawnY", (int) $spawn->y),
 			//new Int("SpawnZ", (int) $spawn->z),
 			//new Byte("SpawnForced", 1), //TODO
 			new EnumTag("Inventory", []),
-			new Compound("Achievements", []),
+			new CompoundTag("Achievements", []),
 			new IntTag("playerGameType", $this->getGamemode()),
 			new EnumTag("Motion", [
 				new Double(0, 0.0),
@@ -734,15 +734,15 @@ class Server{
 				new Double(2, 0.0)
 			]),
 			new EnumTag("Rotation", [
-				new Float(0, 0.0),
-				new Float(1, 0.0)
+				new FloatTag(0, 0.0),
+				new FloatTag(1, 0.0)
 			]),
-			new Float("FallDistance", 0.0),
+			new FloatTag("FallDistance", 0.0),
 			new Short("Fire", 0),
 			new Short("Air", 0),
 			new ByteTag("OnGround", 1),
 			new ByteTag("Invulnerable", 0),
-			new String("NameTag", $name),
+			new StringTag("NameTag", $name),
 		]);
 		$nbt->Pos->setTagType(NBT::TAG_Double);
 		$nbt->Inventory->setTagType(NBT::TAG_Compound);
@@ -763,7 +763,7 @@ class Server{
 			$this->logger->notice("Old Player data found for \"" . $name . "\", upgrading profile");
 			foreach($data->get("inventory") as $slot => $item){
 				if(\count($item) === 3){
-					$nbt->Inventory[$slot + 9] = new Compound(\false, [
+					$nbt->Inventory[$slot + 9] = new CompoundTag(\false, [
 						new Short("id", $item[0]),
 						new Short("Damage", $item[1]),
 						new ByteTag("Count", $item[2]),
@@ -775,7 +775,7 @@ class Server{
 			foreach($data->get("hotbar") as $slot => $itemSlot){
 				if(isset($nbt->Inventory[$itemSlot + 9])){
 					$item = $nbt->Inventory[$itemSlot + 9];
-					$nbt->Inventory[$slot] = new Compound(\false, [
+					$nbt->Inventory[$slot] = new CompoundTag(\false, [
 						new Short("id", $item["id"]),
 						new Short("Damage", $item["Damage"]),
 						new ByteTag("Count", $item["Count"]),
@@ -786,7 +786,7 @@ class Server{
 			}
 			foreach($data->get("armor") as $slot => $item){
 				if(\count($item) === 2){
-					$nbt->Inventory[$slot + 100] = new Compound(\false, [
+					$nbt->Inventory[$slot + 100] = new CompoundTag(\false, [
 						new Short("id", $item[0]),
 						new Short("Damage", $item[1]),
 						new ByteTag("Count", 1),
@@ -807,9 +807,9 @@ class Server{
 
 	/**
 	 * @param string   $name
-	 * @param Compound $nbtTag
+	 * @param CompoundTag $nbtTag
 	 */
-	public function saveOfflinePlayerData($name, Compound $nbtTag){
+	public function saveOfflinePlayerData($name, CompoundTag $nbtTag){
 		$nbt = new NBT(NBT::BIG_ENDIAN);
 		try{
 			$nbt->setData($nbtTag);
@@ -1497,7 +1497,7 @@ class Server{
 
 		$this->logger->info("Loading pocketmine.yml...");
 		if(!\file_exists($this->dataPath . "pocketmine.yml")){
-			$content = \file_get_contents($this->filePath . "src/pocketmine/resources/pocketmine.yml");
+			$content = @\file_get_contents($this->filePath . "src/pocketmine/resources/pocketmine.yml");
 			if($version->isDev()){
 				$content = \str_replace("preferred-channel: stable", "preferred-channel: beta", $content);
 			}

@@ -47,11 +47,11 @@ class EnumTag extends NamedTag implements \ArrayAccess, \Countable{
 		return $value;
 	}
 
-	public function offsetExists(mixed $offset): bool{
+	public function offsetExists($offset): bool{
 		return isset($this->{$offset});
 	}
 
-	public function offsetGet(mixed $offset): mixed{
+	public function offsetGet($offset){
 		if(isset($this->{$offset}) and $this->{$offset} instanceof Tag){
 			if($this->{$offset} instanceof \ArrayAccess){
 				return $this->{$offset};
@@ -63,7 +63,7 @@ class EnumTag extends NamedTag implements \ArrayAccess, \Countable{
 		return \null;
 	}
 
-	public function offsetSet(mixed $offset, mixed $value): void{
+	public function offsetSet($offset, $value){
 		if($value instanceof Tag){
 			$this->{$offset} = $value;
 		}elseif($this->{$offset} instanceof Tag){
@@ -71,7 +71,7 @@ class EnumTag extends NamedTag implements \ArrayAccess, \Countable{
 		}
 	}
 
-	public function offsetUnset(mixed $offset): void{
+	public function offsetUnset($offset){
 		unset($this->{$offset});
 	}
 
@@ -129,7 +129,7 @@ class EnumTag extends NamedTag implements \ArrayAccess, \Countable{
 					$this->{$i} = $tag;
 					break;
 				case NBT::TAG_Float:
-					$tag = new Float(\false);
+					$tag = new FloatTag(\false);
 					$tag->read($nbt);
 					$this->{$i} = $tag;
 					break;
@@ -139,12 +139,12 @@ class EnumTag extends NamedTag implements \ArrayAccess, \Countable{
 					$this->{$i} = $tag;
 					break;
 				case NBT::TAG_ByteArray:
-					$tag = new ByteArray(\false);
+					$tag = new ByteArrayTag(\false);
 					$tag->read($nbt);
 					$this->{$i} = $tag;
 					break;
 				case NBT::TAG_String:
-					$tag = new String(\false);
+					$tag = new StringTag(\false);
 					$tag->read($nbt);
 					$this->{$i} = $tag;
 					break;
@@ -154,7 +154,7 @@ class EnumTag extends NamedTag implements \ArrayAccess, \Countable{
 					$this->{$i} = $tag;
 					break;
 				case NBT::TAG_Compound:
-					$tag = new Compound(\false);
+					$tag = new CompoundTag(\false);
 					$tag->read($nbt);
 					$this->{$i} = $tag;
 					break;
