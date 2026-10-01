@@ -25,12 +25,12 @@ use pocketmine\level\format\generic\BaseChunk;
 use pocketmine\level\format\generic\EmptyChunkSection;
 use pocketmine\level\format\LevelProvider;
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\Byte;
+use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\ByteArray;
 use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\Int;
-use pocketmine\nbt\tag\IntArray;
+use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\IntArrayTag;
 use pocketmine\Player;
 use pocketmine\utils\Binary;
 
@@ -42,23 +42,23 @@ class Chunk extends BaseChunk{
 	public function __construct($level, Compound $nbt){
 		$this->nbt = $nbt;
 
-		if(!isset($this->nbt->Entities) or !($this->nbt->Entities instanceof Enum)){
-			$this->nbt->Entities = new Enum("Entities", []);
+		if(!isset($this->nbt->Entities) or !($this->nbt->Entities instanceof EnumTag)){
+			$this->nbt->Entities = new EnumTag("Entities", []);
 			$this->nbt->Entities->setTagType(NBT::TAG_Compound);
 		}
 
-		if(!isset($this->nbt->TileEntities) or !($this->nbt->TileEntities instanceof Enum)){
-			$this->nbt->TileEntities = new Enum("TileEntities", []);
+		if(!isset($this->nbt->TileEntities) or !($this->nbt->TileEntities instanceof EnumTag)){
+			$this->nbt->TileEntities = new EnumTag("TileEntities", []);
 			$this->nbt->TileEntities->setTagType(NBT::TAG_Compound);
 		}
 
-		if(!isset($this->nbt->TileTicks) or !($this->nbt->TileTicks instanceof Enum)){
-			$this->nbt->TileTicks = new Enum("TileTicks", []);
+		if(!isset($this->nbt->TileTicks) or !($this->nbt->TileTicks instanceof EnumTag)){
+			$this->nbt->TileTicks = new EnumTag("TileTicks", []);
 			$this->nbt->TileTicks->setTagType(NBT::TAG_Compound);
 		}
 
-		if(!isset($this->nbt->Sections) or !($this->nbt->Sections instanceof Enum)){
-			$this->nbt->Sections = new Enum("Sections", []);
+		if(!isset($this->nbt->Sections) or !($this->nbt->Sections instanceof EnumTag)){
+			$this->nbt->Sections = new EnumTag("Sections", []);
 			$this->nbt->Sections->setTagType(NBT::TAG_Compound);
 		}
 
@@ -66,12 +66,12 @@ class Chunk extends BaseChunk{
 			$this->nbt->Biomes = new ByteArray("Biomes", \str_repeat("\x01", 256));
 		}
 
-		if(!isset($this->nbt->BiomeColors) or !($this->nbt->BiomeColors instanceof IntArray)){
-			$this->nbt->BiomeColors = new IntArray("BiomeColors", \array_fill(0, 256, (\PHP_INT_SIZE === 8 ? \unpack("N", "\x00\x85\xb2\x4a")[1] << 32 >> 32 : \unpack("N", "\x00\x85\xb2\x4a")[1])));
+		if(!isset($this->nbt->BiomeColors) or !($this->nbt->BiomeColors instanceof IntArrayTag)){
+			$this->nbt->BiomeColors = new IntArrayTag("BiomeColors", \array_fill(0, 256, (\PHP_INT_SIZE === 8 ? \unpack("N", "\x00\x85\xb2\x4a")[1] << 32 >> 32 : \unpack("N", "\x00\x85\xb2\x4a")[1])));
 		}
 
-		if(!isset($this->nbt->HeightMap) or !($this->nbt->HeightMap instanceof IntArray)){
-			$this->nbt->HeightMap = new IntArray("HeightMap", \array_fill(0, 256, 127));
+		if(!isset($this->nbt->HeightMap) or !($this->nbt->HeightMap instanceof IntArrayTag)){
+			$this->nbt->HeightMap = new IntArrayTag("HeightMap", \array_fill(0, 256, 127));
 		}
 
 		$sections = [];
@@ -105,7 +105,7 @@ class Chunk extends BaseChunk{
 	 * @param int $value
 	 */
 	public function setPopulated($value = 1){
-		$this->nbt->TerrainPopulated = new Byte("TerrainPopulated", $value);
+		$this->nbt->TerrainPopulated = new ByteTag("TerrainPopulated", $value);
 	}
 
 	/**
@@ -119,7 +119,7 @@ class Chunk extends BaseChunk{
 	 * @param int $value
 	 */
 	public function setGenerated($value = 1){
-		$this->nbt->TerrainGenerated = new Byte("TerrainGenerated", $value);
+		$this->nbt->TerrainGenerated = new ByteTag("TerrainGenerated", $value);
 	}
 
 	/**
@@ -135,7 +135,7 @@ class Chunk extends BaseChunk{
 	 *
 	 * @return Chunk
 	 */
-	public static function fromBinary($data, LevelProvider $provider = \null){
+	public static function fromBinary($data, LevelProvider $provider = null){
 		$nbt = new NBT(NBT::BIG_ENDIAN);
 
 		try{
@@ -155,17 +155,17 @@ class Chunk extends BaseChunk{
 	public function toBinary(){
 		$nbt = clone $this->getNBT();
 
-		$nbt->xPos = new Int("xPos", $this->x);
-		$nbt->zPos = new Int("zPos", $this->z);
+		$nbt->xPos = new IntTag("xPos", $this->x);
+		$nbt->zPos = new IntTag("zPos", $this->z);
 
-		$nbt->Sections = new Enum("Sections", []);
+		$nbt->Sections = new EnumTag("Sections", []);
 		$nbt->Sections->setTagType(NBT::TAG_Compound);
 		foreach($this->getSections() as $section){
 			if($section instanceof EmptyChunkSection){
 				continue;
 			}
 			$nbt->Sections[$section->getY()] = new Compound(\null, [
-				"Y" => new Byte("Y", $section->getY()),
+				"Y" => new ByteTag("Y", $section->getY()),
 				"Blocks" => new ByteArray("Blocks", $section->getIdArray()),
 				"Data" => new ByteArray("Data", $section->getDataArray()),
 				"BlockLight" => new ByteArray("BlockLight", $section->getLightArray()),
@@ -174,9 +174,9 @@ class Chunk extends BaseChunk{
 		}
 
 		$nbt->Biomes = new ByteArray("Biomes", $this->getBiomeIdArray());
-		$nbt->BiomeColors = new IntArray("BiomeColors", $this->getBiomeColorArray());
+		$nbt->BiomeColors = new IntArrayTag("BiomeColors", $this->getBiomeColorArray());
 
-		$nbt->HeightMap = new IntArray("HeightMap", $this->getHeightMapArray());
+		$nbt->HeightMap = new IntArrayTag("HeightMap", $this->getHeightMapArray());
 
 		$entities = [];
 
@@ -187,7 +187,7 @@ class Chunk extends BaseChunk{
 			}
 		}
 
-		$nbt->Entities = new Enum("Entities", $entities);
+		$nbt->Entities = new EnumTag("Entities", $entities);
 		$nbt->Entities->setTagType(NBT::TAG_Compound);
 
 
@@ -197,7 +197,7 @@ class Chunk extends BaseChunk{
 			$tiles[] = $tile->namedtag;
 		}
 
-		$nbt->TileEntities = new Enum("TileEntities", $tiles);
+		$nbt->TileEntities = new EnumTag("TileEntities", $tiles);
 		$nbt->TileEntities->setTagType(NBT::TAG_Compound);
 		$writer = new NBT(NBT::BIG_ENDIAN);
 		$nbt->setName("Level");

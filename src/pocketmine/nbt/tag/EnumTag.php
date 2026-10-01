@@ -22,25 +22,10 @@
 namespace pocketmine\nbt\tag;
 
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\Enum as TagEnum;
-
 use pocketmine\utils\Binary;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-class Enum extends NamedTag implements \ArrayAccess, \Countable{
+class EnumTag extends NamedTag implements \ArrayAccess, \Countable{
 
 	private $tagType;
 
@@ -62,11 +47,11 @@ class Enum extends NamedTag implements \ArrayAccess, \Countable{
 		return $value;
 	}
 
-	public function offsetExists($offset){
+	public function offsetExists(mixed $offset): bool{
 		return isset($this->{$offset});
 	}
 
-	public function offsetGet($offset){
+	public function offsetGet(mixed $offset): mixed{
 		if(isset($this->{$offset}) and $this->{$offset} instanceof Tag){
 			if($this->{$offset} instanceof \ArrayAccess){
 				return $this->{$offset};
@@ -78,7 +63,7 @@ class Enum extends NamedTag implements \ArrayAccess, \Countable{
 		return \null;
 	}
 
-	public function offsetSet($offset, $value){
+	public function offsetSet(mixed $offset, mixed $value): void{
 		if($value instanceof Tag){
 			$this->{$offset} = $value;
 		}elseif($this->{$offset} instanceof Tag){
@@ -86,11 +71,11 @@ class Enum extends NamedTag implements \ArrayAccess, \Countable{
 		}
 	}
 
-	public function offsetUnset($offset){
+	public function offsetUnset(mixed $offset): void{
 		unset($this->{$offset});
 	}
 
-	public function count($mode = COUNT_NORMAL){
+	public function count($mode = COUNT_NORMAL): int{
 		for($i = 0; \true; $i++){
 			if(!isset($this->{$i})){
 				return $i;
@@ -124,7 +109,7 @@ class Enum extends NamedTag implements \ArrayAccess, \Countable{
 		for($i = 0; $i < $size and !$nbt->feof(); ++$i){
 			switch($this->tagType){
 				case NBT::TAG_Byte:
-					$tag = new Byte(\false);
+					$tag = new ByteTag(\false);
 					$tag->read($nbt);
 					$this->{$i} = $tag;
 					break;
@@ -134,7 +119,7 @@ class Enum extends NamedTag implements \ArrayAccess, \Countable{
 					$this->{$i} = $tag;
 					break;
 				case NBT::TAG_Int:
-					$tag = new Int(\false);
+					$tag = new IntTag(\false);
 					$tag->read($nbt);
 					$this->{$i} = $tag;
 					break;
@@ -164,7 +149,7 @@ class Enum extends NamedTag implements \ArrayAccess, \Countable{
 					$this->{$i} = $tag;
 					break;
 				case NBT::TAG_Enum:
-					$tag = new TagEnum(\false);
+					$tag = new EnumTag(\false);
 					$tag->read($nbt);
 					$this->{$i} = $tag;
 					break;
@@ -174,7 +159,7 @@ class Enum extends NamedTag implements \ArrayAccess, \Countable{
 					$this->{$i} = $tag;
 					break;
 				case NBT::TAG_IntArray:
-					$tag = new IntArray(\false);
+					$tag = new IntArrayTag(\false);
 					$tag->read($nbt);
 					$this->{$i} = $tag;
 					break;

@@ -30,9 +30,9 @@ use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
 use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\Byte;
+use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Enum;
+use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\Short;
 use pocketmine\network\protocol\ContainerSetDataPacket;
 
@@ -44,8 +44,8 @@ class Furnace extends Tile implements InventoryHolder, Container{
 		parent::__construct($chunk, $nbt);
 		$this->inventory = new FurnaceInventory($this);
 
-		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof Enum)){
-			$this->namedtag->Items = new Enum("Inventory", []);
+		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof EnumTag)){
+			$this->namedtag->Items = new EnumTag("Inventory", []);
 			$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		}
 
@@ -78,7 +78,7 @@ class Furnace extends Tile implements InventoryHolder, Container{
 	}
 
 	public function saveNBT(){
-		$this->namedtag->Items = new Enum("Inventory", []);
+		$this->namedtag->Items = new EnumTag("Inventory", []);
 		$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		for($index = 0; $index < $this->getSize(); ++$index){
 			$this->setItem($index, $this->inventory->getItem($index));
@@ -135,8 +135,8 @@ class Furnace extends Tile implements InventoryHolder, Container{
 		$i = $this->getSlotIndex($index);
 
 		$d = new Compound(\false, [
-			new Byte("Count", $item->getCount()),
-			new Byte("Slot", $index),
+			new ByteTag("Count", $item->getCount()),
+			new ByteTag("Slot", $index),
 			new Short("id", $item->getId()),
 			new Short("Damage", $item->getDamage()),
 		]);

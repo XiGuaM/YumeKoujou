@@ -24,12 +24,12 @@ namespace pocketmine\level\format\mcregion;
 use pocketmine\level\format\FullChunk;
 use pocketmine\level\format\LevelProvider;
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\Byte;
+use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\ByteArray;
 use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\Int;
-use pocketmine\nbt\tag\IntArray;
+use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\IntArrayTag;
 use pocketmine\nbt\tag\Long;
 use pocketmine\utils\Binary;
 use pocketmine\utils\ChunkException;
@@ -149,27 +149,27 @@ class RegionLoader{
 
 	public function generateChunk($x, $z){
 		$nbt = new Compound("Level", []);
-		$nbt->xPos = new Int("xPos", ($this->getX() * 32) + $x);
-		$nbt->zPos = new Int("zPos", ($this->getZ() * 32) + $z);
+		$nbt->xPos = new IntTag("xPos", ($this->getX() * 32) + $x);
+		$nbt->zPos = new IntTag("zPos", ($this->getZ() * 32) + $z);
 		$nbt->LastUpdate = new Long("LastUpdate", 0);
-		$nbt->LightPopulated = new Byte("LightPopulated", 0);
-		$nbt->TerrainPopulated = new Byte("TerrainPopulated", 0);
-		$nbt->V = new Byte("V", self::VERSION);
+		$nbt->LightPopulated = new ByteTag("LightPopulated", 0);
+		$nbt->TerrainPopulated = new ByteTag("TerrainPopulated", 0);
+		$nbt->V = new ByteTag("V", self::VERSION);
 		$nbt->InhabitedTime = new Long("InhabitedTime", 0);
 		$nbt->Biomes = new ByteArray("Biomes", \str_repeat(\chr(-1), 256));
-		$nbt->HeightMap = new IntArray("HeightMap", \array_fill(0, 256, 127));
-		$nbt->BiomeColors = new IntArray("BiomeColors", \array_fill(0, 256, (\PHP_INT_SIZE === 8 ? \unpack("N", "\x00\x85\xb2\x4a")[1] << 32 >> 32 : \unpack("N", "\x00\x85\xb2\x4a")[1])));
+		$nbt->HeightMap = new IntArrayTag("HeightMap", \array_fill(0, 256, 127));
+		$nbt->BiomeColors = new IntArrayTag("BiomeColors", \array_fill(0, 256, (\PHP_INT_SIZE === 8 ? \unpack("N", "\x00\x85\xb2\x4a")[1] << 32 >> 32 : \unpack("N", "\x00\x85\xb2\x4a")[1])));
 
 		$nbt->Blocks = new ByteArray("Blocks", \str_repeat("\x00", 32768));
 		$nbt->Data = new ByteArray("Data", $half = \str_repeat("\x00", 16384));
 		$nbt->SkyLight = new ByteArray("SkyLight", $half);
 		$nbt->BlockLight = new ByteArray("BlockLight", $half);
 
-		$nbt->Entities = new Enum("Entities", []);
+		$nbt->Entities = new EnumTag("Entities", []);
 		$nbt->Entities->setTagType(NBT::TAG_Compound);
-		$nbt->TileEntities = new Enum("TileEntities", []);
+		$nbt->TileEntities = new EnumTag("TileEntities", []);
 		$nbt->TileEntities->setTagType(NBT::TAG_Compound);
-		$nbt->TileTicks = new Enum("TileTicks", []);
+		$nbt->TileTicks = new EnumTag("TileTicks", []);
 		$nbt->TileTicks->setTagType(NBT::TAG_Compound);
 		$writer = new NBT(NBT::BIG_ENDIAN);
 		$nbt->setName("Level");

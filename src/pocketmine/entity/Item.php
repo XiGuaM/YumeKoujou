@@ -27,7 +27,7 @@ use pocketmine\event\entity\ItemDespawnEvent;
 use pocketmine\event\entity\ItemSpawnEvent;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\math\Vector3;
-use pocketmine\nbt\tag\Byte;
+use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Short;
 use pocketmine\nbt\tag\String;
@@ -149,7 +149,7 @@ class Item extends Entity{
 		$this->namedtag->Item = new Compound("Item", [
 			"id" => new Short("id", $this->item->getId()),
 			"Damage" => new Short("Damage", $this->item->getDamage()),
-			"Count" => new Byte("Count", $this->item->getCount())
+			"Count" => new ByteTag("Count", $this->item->getCount())
 		]);
 		$this->namedtag->Health = new Short("Health", $this->getHealth());
 		$this->namedtag->Age = new Short("Age", $this->age);

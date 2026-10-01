@@ -23,7 +23,7 @@ namespace pocketmine\tile;
 
 use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Int;
+use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\String;
 
 class Sign extends Spawnable{
@@ -76,9 +76,9 @@ class Sign extends Spawnable{
 			$this->namedtag->Text2,
 			$this->namedtag->Text3,
 			$this->namedtag->Text4,
-			new Int("x", (int) $this->x),
-			new Int("y", (int) $this->y),
-			new Int("z", (int) $this->z)
+			new IntTag("x", (int) $this->x),
+			new IntTag("y", (int) $this->y),
+			new IntTag("z", (int) $this->z)
 		]);
 	}
 

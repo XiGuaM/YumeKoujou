@@ -22,24 +22,9 @@
 namespace pocketmine\nbt\tag;
 
 use pocketmine\nbt\NBT;
-
 use pocketmine\utils\Binary;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class Byte extends NamedTag{
+class ByteTag extends NamedTag{
 
 	public function getType(){
 		return NBT::TAG_Byte;

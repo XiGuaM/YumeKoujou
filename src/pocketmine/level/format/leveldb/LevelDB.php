@@ -26,9 +26,9 @@ use pocketmine\level\format\generic\BaseLevelProvider;
 use pocketmine\level\generator\Generator;
 use pocketmine\level\Level;
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\Byte;
+use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Int;
+use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\Long;
 use pocketmine\nbt\tag\String;
 use pocketmine\tile\Spawnable;
@@ -97,15 +97,15 @@ class LevelDB extends BaseLevelProvider{
 		}
 		//TODO, add extra details
 		$levelData = new Compound(\null, [
-			"hardcore" => new Byte("hardcore", 0),
-			"initialized" => new Byte("initialized", 1),
-			"GameType" => new Int("GameType", 0),
-			"generatorVersion" => new Int("generatorVersion", 1), //2 in MCPE
-			"SpawnX" => new Int("SpawnX", 128),
-			"SpawnY" => new Int("SpawnY", 70),
-			"SpawnZ" => new Int("SpawnZ", 128),
-			"version" => new Int("version", 19133),
-			"DayTime" => new Int("DayTime", 0),
+			"hardcore" => new ByteTag("hardcore", 0),
+			"initialized" => new ByteTag("initialized", 1),
+			"GameType" => new IntTag("GameType", 0),
+			"generatorVersion" => new IntTag("generatorVersion", 1), //2 in MCPE
+			"SpawnX" => new IntTag("SpawnX", 128),
+			"SpawnY" => new IntTag("SpawnY", 70),
+			"SpawnZ" => new IntTag("SpawnZ", 128),
+			"version" => new IntTag("version", 19133),
+			"DayTime" => new IntTag("DayTime", 0),
 			"LastPlayed" => new Long("LastPlayed", \microtime(\true) * 1000),
 			"RandomSeed" => new Long("RandomSeed", $seed),
 			"SizeOnDisk" => new Long("SizeOnDisk", 0),

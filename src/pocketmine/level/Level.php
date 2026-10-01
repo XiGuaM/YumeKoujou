@@ -74,12 +74,12 @@ use pocketmine\math\Vector3;
 use pocketmine\metadata\BlockMetadataStore;
 use pocketmine\metadata\Metadatable;
 use pocketmine\metadata\MetadataValue;
-use pocketmine\nbt\tag\Byte;
+use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Double;
-use pocketmine\nbt\tag\Enum;
+use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\Float;
-use pocketmine\nbt\tag\Int;
+use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\Short;
 use pocketmine\nbt\tag\String;
 use pocketmine\network\protocol\SetTimePacket;
@@ -95,11 +95,6 @@ use pocketmine\utils\LevelException;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\ReversePriorityQueue;
 use pocketmine\utils\TextFormat;
-
-
-
-
-
 
 class Level implements ChunkManager, Metadatable{
 
@@ -1175,18 +1170,18 @@ class Level implements ChunkManager, Metadatable{
 		$motion = $motion === \null ? new Vector3(\lcg_value() * 0.2 - 0.1, 0.2, \lcg_value() * 0.2 - 0.1) : $motion;
 		if($item->getId() > 0 and $item->getCount() > 0){
 			$itemEntity = Entity::createEntity("Item", $this->getChunk($source->getX() >> 4, $source->getZ() >> 4), new Compound("", [
-				"Pos" => new Enum("Pos", [
+				"Pos" => new EnumTag("Pos", [
 					new Double("", $source->getX()),
 					new Double("", $source->getY()),
 					new Double("", $source->getZ())
 				]),
 
-				"Motion" => new Enum("Motion", [
+				"Motion" => new EnumTag("Motion", [
 					new Double("", $motion->x),
 					new Double("", $motion->y),
 					new Double("", $motion->z)
 				]),
-				"Rotation" => new Enum("Rotation", [
+				"Rotation" => new EnumTag("Rotation", [
 					new Float("", \lcg_value() * 360),
 					new Float("", 0)
 				]),
@@ -1194,7 +1189,7 @@ class Level implements ChunkManager, Metadatable{
 				"Item" => new Compound("Item", [
 					"id" => new Short("id", $item->getId()),
 					"Damage" => new Short("Damage", $item->getDamage()),
-					"Count" => new Byte("Count", $item->getCount())
+					"Count" => new ByteTag("Count", $item->getCount())
 				]),
 				"PickupDelay" => new Short("PickupDelay", $delay)
 			]));
@@ -1408,9 +1403,9 @@ class Level implements ChunkManager, Metadatable{
 		if($hand->getId() === Item::SIGN_POST or $hand->getId() === Item::WALL_SIGN){
 			$tile = Tile::createTile("Sign", $this->getChunk($block->x >> 4, $block->z >> 4), new Compound(\false, [
 				"id" => new String("id", Tile::SIGN),
-				"x" => new Int("x", $block->x),
-				"y" => new Int("y", $block->y),
-				"z" => new Int("z", $block->z),
+				"x" => new IntTag("x", $block->x),
+				"y" => new IntTag("y", $block->y),
+				"z" => new IntTag("z", $block->z),
 				"Text1" => new String("Text1", ""),
 				"Text2" => new String("Text2", ""),
 				"Text3" => new String("Text3", ""),

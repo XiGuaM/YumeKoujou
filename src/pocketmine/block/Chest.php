@@ -25,8 +25,8 @@ use pocketmine\item\Item;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\Int;
+use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\String;
 use pocketmine\Player;
 use pocketmine\tile\Chest as TileChest;
@@ -92,11 +92,11 @@ class Chest extends Transparent{
 
 		$this->getLevel()->setBlock($block, $this, \true, \true);
 		$nbt = new Compound(\false, [
-			new Enum("Items", []),
+			new EnumTag("Items", []),
 			new String("id", Tile::CHEST),
-			new Int("x", $this->x),
-			new Int("y", $this->y),
-			new Int("z", $this->z)
+			new IntTag("x", $this->x),
+			new IntTag("y", $this->y),
+			new IntTag("z", $this->z)
 		]);
 		$nbt->Items->setTagType(NBT::TAG_Compound);
 		$tile = Tile::createTile("Chest", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
@@ -132,11 +132,11 @@ class Chest extends Transparent{
 				$chest = $t;
 			}else{
 				$nbt = new Compound(\false, [
-					new Enum("Items", []),
+					new EnumTag("Items", []),
 					new String("id", Tile::CHEST),
-					new Int("x", $this->x),
-					new Int("y", $this->y),
-					new Int("z", $this->z)
+					new IntTag("x", $this->x),
+					new IntTag("y", $this->y),
+					new IntTag("z", $this->z)
 				]);
 				$nbt->Items->setTagType(NBT::TAG_Compound);
 				$chest = Tile::createTile("Chest", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);

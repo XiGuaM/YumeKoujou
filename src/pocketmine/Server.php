@@ -64,12 +64,12 @@ use pocketmine\metadata\EntityMetadataStore;
 use pocketmine\metadata\LevelMetadataStore;
 use pocketmine\metadata\PlayerMetadataStore;
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\Byte;
+use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Double;
-use pocketmine\nbt\tag\Enum;
+use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\Float;
-use pocketmine\nbt\tag\Int;
+use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\Long;
 use pocketmine\nbt\tag\Short;
 use pocketmine\nbt\tag\String;
@@ -714,7 +714,7 @@ class Server{
 		$nbt = new Compound(\false, [
 			new Long("firstPlayed", \floor(\microtime(\true) * 1000)),
 			new Long("lastPlayed", \floor(\microtime(\true) * 1000)),
-			new Enum("Pos", [
+			new EnumTag("Pos", [
 				new Double(0, $spawn->x),
 				new Double(1, $spawn->y),
 				new Double(2, $spawn->z)
@@ -725,23 +725,23 @@ class Server{
 			//new Int("SpawnY", (int) $spawn->y),
 			//new Int("SpawnZ", (int) $spawn->z),
 			//new Byte("SpawnForced", 1), //TODO
-			new Enum("Inventory", []),
+			new EnumTag("Inventory", []),
 			new Compound("Achievements", []),
-			new Int("playerGameType", $this->getGamemode()),
-			new Enum("Motion", [
+			new IntTag("playerGameType", $this->getGamemode()),
+			new EnumTag("Motion", [
 				new Double(0, 0.0),
 				new Double(1, 0.0),
 				new Double(2, 0.0)
 			]),
-			new Enum("Rotation", [
+			new EnumTag("Rotation", [
 				new Float(0, 0.0),
 				new Float(1, 0.0)
 			]),
 			new Float("FallDistance", 0.0),
 			new Short("Fire", 0),
 			new Short("Air", 0),
-			new Byte("OnGround", 1),
-			new Byte("Invulnerable", 0),
+			new ByteTag("OnGround", 1),
+			new ByteTag("Invulnerable", 0),
 			new String("NameTag", $name),
 		]);
 		$nbt->Pos->setTagType(NBT::TAG_Double);
@@ -766,9 +766,9 @@ class Server{
 					$nbt->Inventory[$slot + 9] = new Compound(\false, [
 						new Short("id", $item[0]),
 						new Short("Damage", $item[1]),
-						new Byte("Count", $item[2]),
-						new Byte("Slot", $slot + 9),
-						new Byte("TrueSlot", $slot + 9)
+						new ByteTag("Count", $item[2]),
+						new ByteTag("Slot", $slot + 9),
+						new ByteTag("TrueSlot", $slot + 9)
 					]);
 				}
 			}
@@ -778,9 +778,9 @@ class Server{
 					$nbt->Inventory[$slot] = new Compound(\false, [
 						new Short("id", $item["id"]),
 						new Short("Damage", $item["Damage"]),
-						new Byte("Count", $item["Count"]),
-						new Byte("Slot", $slot),
-						new Byte("TrueSlot", $item["TrueSlot"])
+						new ByteTag("Count", $item["Count"]),
+						new ByteTag("Slot", $slot),
+						new ByteTag("TrueSlot", $item["TrueSlot"])
 					]);
 				}
 			}
@@ -789,13 +789,13 @@ class Server{
 					$nbt->Inventory[$slot + 100] = new Compound(\false, [
 						new Short("id", $item[0]),
 						new Short("Damage", $item[1]),
-						new Byte("Count", 1),
-						new Byte("Slot", $slot + 100)
+						new ByteTag("Count", 1),
+						new ByteTag("Slot", $slot + 100)
 					]);
 				}
 			}
 			foreach($data->get("achievements") as $achievement => $status){
-				$nbt->Achievements[$achievement] = new Byte($achievement, $status == \true ? 1 : 0);
+				$nbt->Achievements[$achievement] = new ByteTag($achievement, $status == \true ? 1 : 0);
 			}
 			\unlink($path . "$name.yml");
 		}

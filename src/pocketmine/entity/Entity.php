@@ -45,10 +45,10 @@ use pocketmine\math\Math;
 use pocketmine\math\Vector3;
 use pocketmine\metadata\Metadatable;
 use pocketmine\metadata\MetadataValue;
-use pocketmine\nbt\tag\Byte;
+use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Double;
-use pocketmine\nbt\tag\Enum;
+use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\Float;
 use pocketmine\nbt\tag\Short;
 use pocketmine\nbt\tag\String;
@@ -211,12 +211,12 @@ abstract class Entity extends Location implements Metadatable{
 		$this->airTicks = $this->namedtag["Air"];
 
 		if(!isset($this->namedtag->OnGround)){
-			$this->namedtag->OnGround = new Byte("OnGround", 0);
+			$this->namedtag->OnGround = new ByteTag("OnGround", 0);
 		}
 		$this->onGround = $this->namedtag["OnGround"] > 0 ? \true : \false;
 
 		if(!isset($this->namedtag->Invulnerable)){
-			$this->namedtag->Invulnerable = new Byte("Invulnerable", 0);
+			$this->namedtag->Invulnerable = new ByteTag("Invulnerable", 0);
 		}
 		$this->invulnerable = $this->namedtag["Invulnerable"] > 0 ? \true : \false;
 
@@ -278,19 +278,19 @@ abstract class Entity extends Location implements Metadatable{
 			$this->namedtag->id = new String("id", $this->getSaveId());
 		}
 
-		$this->namedtag->Pos = new Enum("Pos", [
+		$this->namedtag->Pos = new EnumTag("Pos", [
 			new Double(0, $this->x),
 			new Double(1, $this->y),
 			new Double(2, $this->z)
 		]);
 
-		$this->namedtag->Motion = new Enum("Motion", [
+		$this->namedtag->Motion = new EnumTag("Motion", [
 			new Double(0, $this->motionX),
 			new Double(1, $this->motionY),
 			new Double(2, $this->motionZ)
 		]);
 
-		$this->namedtag->Rotation = new Enum("Rotation", [
+		$this->namedtag->Rotation = new EnumTag("Rotation", [
 			new Float(0, $this->yaw),
 			new Float(1, $this->pitch)
 		]);
@@ -298,8 +298,8 @@ abstract class Entity extends Location implements Metadatable{
 		$this->namedtag->FallDistance = new Float("FallDistance", $this->fallDistance);
 		$this->namedtag->Fire = new Short("Fire", $this->fireTicks);
 		$this->namedtag->Air = new Short("Air", $this->airTicks);
-		$this->namedtag->OnGround = new Byte("OnGround", $this->onGround == \true ? 1 : 0);
-		$this->namedtag->Invulnerable = new Byte("Invulnerable", $this->invulnerable == \true ? 1 : 0);
+		$this->namedtag->OnGround = new ByteTag("OnGround", $this->onGround == \true ? 1 : 0);
+		$this->namedtag->Invulnerable = new ByteTag("Invulnerable", $this->invulnerable == \true ? 1 : 0);
 	}
 
 	protected abstract function initEntity();

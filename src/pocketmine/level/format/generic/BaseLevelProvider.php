@@ -27,7 +27,7 @@ use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Int;
+use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\String;
 use pocketmine\utils\LevelException;
 
@@ -84,7 +84,7 @@ abstract class BaseLevelProvider implements LevelProvider{
 	}
 
 	public function setTime($value){
-		$this->levelData->Time = new Int("Time", (int) $value);
+		$this->levelData->Time = new IntTag("Time", (int) $value);
 	}
 
 	public function getSeed(){
@@ -92,7 +92,7 @@ abstract class BaseLevelProvider implements LevelProvider{
 	}
 
 	public function setSeed($value){
-		$this->levelData->RandomSeed = new Int("RandomSeed", (int) $value);
+		$this->levelData->RandomSeed = new IntTag("RandomSeed", (int) $value);
 	}
 
 	public function getSpawn(){
@@ -100,9 +100,9 @@ abstract class BaseLevelProvider implements LevelProvider{
 	}
 
 	public function setSpawn(Vector3 $pos){
-		$this->levelData->SpawnX = new Int("SpawnX", (int) $pos->x);
-		$this->levelData->SpawnY = new Int("SpawnY", (int) $pos->y);
-		$this->levelData->SpawnZ = new Int("SpawnZ", (int) $pos->z);
+		$this->levelData->SpawnX = new IntTag("SpawnX", (int) $pos->x);
+		$this->levelData->SpawnY = new IntTag("SpawnY", (int) $pos->y);
+		$this->levelData->SpawnZ = new IntTag("SpawnZ", (int) $pos->z);
 	}
 
 	public function doGarbageCollection(){

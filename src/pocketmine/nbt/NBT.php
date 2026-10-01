@@ -24,15 +24,15 @@
  */
 namespace pocketmine\nbt;
 
-use pocketmine\nbt\tag\Byte;
+use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\ByteArray;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\nbt\tag\Double;
 use pocketmine\nbt\tag\End;
-use pocketmine\nbt\tag\Enum;
+use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\Float;
-use pocketmine\nbt\tag\Int;
-use pocketmine\nbt\tag\IntArray;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\IntArrayTag;
 use pocketmine\nbt\tag\Long;
 use pocketmine\nbt\tag\NamedTAG;
 use pocketmine\nbt\tag\Short;
@@ -40,22 +40,7 @@ use pocketmine\nbt\tag\String;
 use pocketmine\nbt\tag\Tag;
 use pocketmine\utils\Utils;
 
-
-
 use pocketmine\utils\Binary;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /**
@@ -91,7 +76,7 @@ class NBT{
 			return \substr($this->buffer, $this->offset);
 		}
 
-		return $len === 1 ? $this->buffer{$this->offset++} : \substr($this->buffer, ($this->offset += $len) - $len, $len);
+		return $len === 1 ? $this->buffer[$this->offset++] : \substr($this->buffer, ($this->offset += $len) - $len, $len);
 	}
 
 	public function put($v){
@@ -99,7 +84,7 @@ class NBT{
 	}
 
 	public function feof(){
-		return !isset($this->buffer{$this->offset});
+		return !isset($this->buffer[$this->offset]);
 	}
 
 	public function __construct($endianness = self::LITTLE_ENDIAN){
@@ -151,7 +136,7 @@ class NBT{
 	public function readTag(){
 		switch(\ord($this->get(1))){
 			case NBT::TAG_Byte:
-				$tag = new Byte($this->getString());
+				$tag = new ByteTag($this->getString());
 				$tag->read($this);
 				break;
 			case NBT::TAG_Short:
@@ -159,7 +144,7 @@ class NBT{
 				$tag->read($this);
 				break;
 			case NBT::TAG_Int:
-				$tag = new Int($this->getString());
+				$tag = new IntTag($this->getString());
 				$tag->read($this);
 				break;
 			case NBT::TAG_Long:
@@ -183,7 +168,7 @@ class NBT{
 				$tag->read($this);
 				break;
 			case NBT::TAG_Enum:
-				$tag = new Enum($this->getString());
+				$tag = new EnumTag($this->getString());
 				$tag->read($this);
 				break;
 			case NBT::TAG_Compound:
@@ -191,7 +176,7 @@ class NBT{
 				$tag->read($this);
 				break;
 			case NBT::TAG_IntArray:
-				$tag = new IntArray($this->getString());
+				$tag = new IntArrayTag($this->getString());
 				$tag->read($this);
 				break;
 
@@ -274,9 +259,9 @@ class NBT{
 	}
 
 	private function toArray(array &$data, Tag $tag){
-		/** @var Compound[]|Enum[]|IntArray[] $tag */
+		/** @var Compound[]|EnumTag[]|IntArrayTag[] $tag */
 		foreach($tag as $key => $value){
-			if($value instanceof Compound or $value instanceof Enum or $value instanceof IntArray){
+			if($value instanceof Compound or $value instanceof EnumTag or $value instanceof IntArrayTag){
 				$data[$key] = [];
 				$this->toArray($data[$key], $value);
 			}else{
@@ -298,20 +283,20 @@ class NBT{
 						$isIntArray = \false;
 					}
 				}
-				$tag{$key} = $isNumeric ? ($isIntArray ? new IntArray($key, []) : new Enum($key, [])) : new Compound($key, []);
-				$this->fromArray($tag->{$key}, $value);
+				$tag[$key] = $isNumeric ? ($isIntArray ? new IntArray($key, []) : new EnumTag($key, [])) : new Compound($key, []);
+				$this->fromArray($tag[$key], $value);
 			}elseif(\is_int($value)){
-				$tag{$key} = new Int($key, $value);
+				$tag[$key] = new IntTag($key, $value);
 			}elseif(\is_float($value)){
-				$tag{$key} = new Float($key, $value);
+				$tag[$key] = new Float($key, $value);
 			}elseif(\is_string($value)){
 				if(Utils::printable($value) !== $value){
-					$tag{$key} = new ByteArray($key, $value);
+					$tag[$key] = new ByteArray($key, $value);
 				}else{
-					$tag{$key} = new String($key, $value);
+					$tag[$key] = new String($key, $value);
 				}
 			}elseif(\is_bool($value)){
-				$tag{$key} = new Byte($key, $value ? 1 : 0);
+				$tag[$key] = new ByteTag($key, $value ? 1 : 0);
 			}
 		}
 	}

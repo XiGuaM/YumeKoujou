@@ -111,7 +111,7 @@ class ChunkRequestTask extends AsyncTask{
 		$i = ($z << 4) + $x;
 		$column = "";
 		for($y = 0; $y < 128; ++$y){
-			$column .= $data{($y << 8) + $i};
+			$column .= $data[($y << 8) + $i];
 		}
 
 		return $column;
@@ -122,11 +122,11 @@ class ChunkRequestTask extends AsyncTask{
 		$column = "";
 		if(($x & 1) === 0){
 			for($y = 0; $y < 128; $y += 2){
-				$column .= ($data{($y << 7) + $i} & "\x0f") | \chr((\ord($data{(($y + 1) << 7) + $i}) & 0x0f) << 4);
+				$column .= ($data[($y << 7) + $i] & "\x0f") | \chr((\ord($data[(($y + 1) << 7) + $i]) & 0x0f) << 4);
 			}
 		}else{
 			for($y = 0; $y < 128; $y += 2){
-				$column .= \chr((\ord($data{($y << 7) + $i}) & 0xf0) >> 4) | ($data{(($y + 1) << 7) + $i} & "\xf0");
+				$column .= \chr((\ord($data[($y << 7) + $i]) & 0xf0) >> 4) | ($data[(($y + 1) << 7) + $i] & "\xf0");
 			}
 		}
 
